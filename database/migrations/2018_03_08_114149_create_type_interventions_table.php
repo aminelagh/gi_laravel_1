@@ -16,7 +16,7 @@ class CreateTypeInterventionsTable extends Migration
         Schema::create('type_interventions', function (Blueprint $table) {
             $table->increments('id_type_intervention');
             $table->string('nom',255);
-            $table->string('description',255);
+            $table->string('description',255)->nullable();
 
             $table->timestamps();
         });

@@ -40,6 +40,23 @@ Route::group(['middleware' => 'admin'], function () {
   //profile
   Route::get('/profile', function(){ return "Profile"; } )->name('admin.profile');
 
+
+  //Famille --------------------------------------------------------------------
+  Route::post('/addFamille', 'AdminController@addFamille')->name('addFamille');
+  Route::post('/updateFamille', 'AdminController@updateFamille')->name('updateFamille');
+  Route::post('/deleteFamille', 'AdminController@deleteFamille')->name('deleteFamille');
+
+  //Equipement -----------------------------------------------------------
+  Route::post('/addEquipement', 'AdminController@addEquipement')->name('addEquipement');
+  Route::post('/updateEquipement', 'AdminController@updateEquipement')->name('updateEquipement');
+  Route::post('/deleteEquipement', 'AdminController@deleteEquipement')->name('deleteEquipement');
+
+  //Type_intervention -----------------------------------------------------------
+  Route::post('/addType_intervention', 'AdminController@addType_intervention')->name('addType_intervention');
+  Route::post('/updateType_intervention', 'AdminController@updateType_intervention')->name('updateType_intervention');
+  Route::post('/deleteType_intervention', 'AdminController@deleteType_intervention')->name('deleteType_intervention');
+
+
 });
 
 
