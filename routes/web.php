@@ -46,15 +46,20 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/updateFamille', 'AdminController@updateFamille')->name('updateFamille');
   Route::post('/deleteFamille', 'AdminController@deleteFamille')->name('deleteFamille');
 
-  //Equipement -----------------------------------------------------------
+  //Equipement -----------------------------------------------------------------
   Route::post('/addEquipement', 'AdminController@addEquipement')->name('addEquipement');
   Route::post('/updateEquipement', 'AdminController@updateEquipement')->name('updateEquipement');
   Route::post('/deleteEquipement', 'AdminController@deleteEquipement')->name('deleteEquipement');
 
-  //Type_intervention -----------------------------------------------------------
+  //Type_intervention ----------------------------------------------------------
   Route::post('/addType_intervention', 'AdminController@addType_intervention')->name('addType_intervention');
   Route::post('/updateType_intervention', 'AdminController@updateType_intervention')->name('updateType_intervention');
   Route::post('/deleteType_intervention', 'AdminController@deleteType_intervention')->name('deleteType_intervention');
+
+  //Technicien -----------------------------------------------------------------
+  Route::post('/addTechnicien', 'AdminController@addTechnicien')->name('addTechnicien');
+  Route::post('/updateTechnicien', 'AdminController@updateTechnicien')->name('updateTechnicien');
+  Route::post('/deleteTechnicien', 'AdminController@deleteTechnicien')->name('deleteTechnicien');
 
 
 });

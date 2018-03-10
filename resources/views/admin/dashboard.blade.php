@@ -13,7 +13,7 @@
 
   <div class="row">
 
-    <section class="col-lg-4 connectedSortable">
+    <section class="col-lg-3 connectedSortable">
 
       <div class="nav-tabs-custom">
         {{-- *************************   Familles   *****************************  --}}
@@ -112,11 +112,88 @@
             </div>
             <div class="box-footer clearfix no-border"></div>
           </div>
+
         </div>
 
       </section>
 
-      <section class="col-lg-5 connectedSortable">
+      <section class="col-lg-6 connectedSortable">
+
+        <div class="nav-tabs-custom">
+          {{-- *************************   Techniciens   *****************************  --}}
+          <div class="box box-warning">
+
+            <div class="box-header with-border">
+              <h3 class="box-title">Techniciens <span class="badge badge-info badge-pill"> {{ $techs->count() }}</span></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <div class="btn-group">
+                  <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a data-toggle="modal" data-target="#modalAddTechnicien"><i class="fa fa-fw fa-plus"></i> Créer un nouveau technicien</a></li>
+                    <li><a data-toggle="modal" data-target="#modalListTechnicien"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Imprimer la liste</a></li>
+                  </ul>
+                </div>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+            <script>
+            $(document).ready(function() {
+              $('#techs').DataTable( {
+                "language": {
+                  "lengthMenu": "Display _MENU_ records per page",
+                  "zeroRecords": "Nothing found - sorry",
+                  "info": "Showing page _PAGE_ of _PAGES_",
+                  "infoEmpty": "No records available",
+                  "infoFiltered": "(filtered from _MAX_ total records)"
+                }
+              } );
+            } );
+            </script>
+
+            <div class="box-body">
+
+              @if($techs->count()==0)
+                <span class="text"><i>Aucun technicien</i></span>
+              @else
+                <table id="techs" class="table table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Technicient</th>
+                      <th>Login</th>
+                      <th>Last Login</th>
+                      <th>Tools</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($techs->take(5) as $item)
+                      <tr>
+                        <td>{{ $item->nom }} {{ $item->prenom }}</td>
+                        <td>{{ $item->login }}</td>
+                        <td>{{ $item->last_login }}</td>
+                        <td>
+                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}" );'></i>
+                          <i class="fa fa-trash-o" onclick="deleteTechnicienFunction({{ $item->id }},'{{ $item->nom }}');" ></i>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              @endif
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+
+
+
+      </section>
+
+      <section class="col-lg-3 connectedSortable">
 
         <div class="nav-tabs-custom">
           {{-- *************************   Type_intervention   *****************************  --}}
@@ -171,6 +248,10 @@
 
       </section>
     </div>
+
+
+
+
 
 
 
@@ -668,6 +749,233 @@
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Type_intervention       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
 
+
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Technicien       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    <div class="CRUD Technicien">
+      <form id="formDeleteTechnicien" method="POST" action="{{ route('deleteTechnicien') }}">
+        @csrf
+        <input type="hidden" id="id_technicien" name="id" />
+      </form>
+      <script>
+      function deleteTechnicienFunction(id_technicien, nom, prenom){
+        var go = confirm('Vos êtes sur les points d\'effacer le technicien: "'+nom+' '+prenom+'".\n voulez-vous continuer?');
+        if(go){
+          document.getElementById("id_technicien").value = id_technicien;
+          document.getElementById("formDeleteTechnicien").submit();
+        }
+      }
+      function updateTechnicienFunction(id_technicien, nom, prenom, login){
+        document.getElementById("update_id_technicien_technicien").value = id_technicien;
+        document.getElementById("update_nom_technicien").value = nom;
+        document.getElementById("update_prenom_technicien").value = prenom;
+        document.getElementById("update_login_technicien").value = login;
+        //document.getElementById("update_password_equipement").value = password;
+      }
+      </script>
+
+      {{-- *****************************    List Technicien    ************************************************ --}}
+      <div class="modal fade" id="modalListTechnicien" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Liste des Techniciens</h4>
+            </div>
+            <div class="box-body">
+
+              <script>
+              $(document).ready(function() {
+                $('#listTechs').DataTable( {
+                  "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "Nothing found - sorry",
+                    "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)"
+                  }
+                } );
+              } );
+              </script>
+
+              @if($techs->count()==0)
+                <span class="text"><i>Aucun technicien</i></span>
+              @else
+                <table id="listTechs" class="table table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Technicient</th>
+                      <th>Login</th>
+                      <th>Last Login</th>
+                      <th>Tools</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($techs as $item)
+                      <tr>
+                        <td>{{ $item->nom }} {{ $item->prenom }}</td>
+                        <td>{{ $item->login }}</td>
+                        <td>{{ $item->last_login }}</td>
+                        <td>
+                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}" );'></i>
+                          <i class="fa fa-trash-o" onclick="deleteTechnicienFunction({{ $item->id }},'{{ $item->nom }}');" ></i>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              @endif
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- *****************************    Add Technicien    ********************************************** --}}
+      <div class="modal fade" id="modalAddTechnicien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- Form add Technicien --}}
+        <form method="POST" action="{{ route('addTechnicien') }}">
+          @csrf
+
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un Technicien</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{-- Nom --}}
+                    <div class="form-group has-feedback">
+                      <label>Nom</label>
+                      <input type="text" class="form-control" placeholder="Nom" name="nom" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    {{-- Prenom --}}
+                    <div class="form-group has-feedback">
+                      <label>Prenom</label>
+                      <input type="text" class="form-control" placeholder="Prenom" name="prenom">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    {{-- Login --}}
+                    <div class="form-group has-feedback">
+                      <label>Login</label>
+                      <input type="text" class="form-control" placeholder="Login" name="login" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    {{-- Password --}}
+                    <div class="form-group has-feedback">
+                      <label>Password</label>
+                      <input type="text" class="form-control" placeholder="Password" name="password" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    {{-- Password Confirmation --}}
+                    <div class="form-group has-feedback">
+                      <label>Confirmation</label>
+                      <input type="text" class="form-control" placeholder="confirmation" name="password_confirmation" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      {{-- *****************************    update Technicien    ************************************************* --}}
+      <div class="modal fade" id="modalUpdateTechnicien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- Form update Technicien --}}
+        <form method="POST" action="{{ route('updateTechnicien') }}">
+          @csrf
+          <input type="hidden" name="id" id="update_id_technicien_technicien">
+
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modification de l'équipement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{-- Nom --}}
+                    <div class="form-group has-feedback">
+                      <label>Nom</label>
+                      <input type="text" class="form-control" placeholder="Nom" name="nom" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    {{-- Prenom --}}
+                    <div class="form-group has-feedback">
+                      <label>Prenom</label>
+                      <input type="text" class="form-control" placeholder="Prenom" name="prenom">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    {{-- Login --}}
+                    <div class="form-group has-feedback">
+                      <label>Login</label>
+                      <input type="text" class="form-control" placeholder="Login" name="login" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    {{-- Password --}}
+                    <div class="form-group has-feedback">
+                      <label>Password</label>
+                      <input type="text" class="form-control" placeholder="Password" name="password" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    {{-- Password Confirmation --}}
+                    <div class="form-group has-feedback">
+                      <label>Confirmation</label>
+                      <input type="text" class="form-control" placeholder="confirmation" name="password_confirmation" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Modifier</button>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Famille       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
 
   @endsection
 
