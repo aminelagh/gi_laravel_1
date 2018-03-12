@@ -27,6 +27,14 @@ Route::get('/', function () {
 Route::group(['middleware' => 'tech'], function () {
   Route::get('/tech', 'TechController@home')->name('tech-dash');
 
+  //updateProfile
+  Route::post('/updateTechProfile', 'TechController@updateProfile')->name('tech.updateProfile');
+
+  //add Intervention
+  Route::post('/addIntervention', 'TechController@addIntervention')->name('tech.addIntervention');
+
+
+
 });
 
 //routes protected by Admin-Middleware
@@ -37,9 +45,8 @@ Route::group(['middleware' => 'admin'], function () {
   Route::get('/register', 'AuthenticationController@register' )->name('admin.register');
   Route::post('/register', 'AuthenticationController@submitRegister' )->name('admin.submitRegister');
 
-  //profile
-  Route::get('/profile', function(){ return "Profile"; } )->name('admin.profile');
-
+  //updateProfile
+  Route::post('/updateAdminProfile', 'AdminController@updateProfile')->name('admin.updateProfile');
 
   //Famille --------------------------------------------------------------------
   Route::post('/addFamille', 'AdminController@addFamille')->name('addFamille');
@@ -60,7 +67,6 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/addTechnicien', 'AdminController@addTechnicien')->name('addTechnicien');
   Route::post('/updateTechnicien', 'AdminController@updateTechnicien')->name('updateTechnicien');
   Route::post('/deleteTechnicien', 'AdminController@deleteTechnicien')->name('deleteTechnicien');
-
 
 });
 

@@ -81,6 +81,7 @@ class AuthenticationController extends Controller
     }
   }
 
+
   /*
   public function submitLogin(Request $request){
 

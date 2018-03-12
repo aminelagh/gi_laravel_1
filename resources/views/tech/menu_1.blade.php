@@ -1,6 +1,6 @@
 <header class="main-header">
   <!-- Logo -->
-  <a class="logo"><b>Administrateur</b></a>
+  <a class="logo"><b>Technicien</b></a>
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top" role="navigation">
     <!-- Sidebar toggle button-->
@@ -20,16 +20,9 @@
               <img src="img/admin.png" class="img-circle" alt="User Image" />
               <p>
                 {{ Session::get('nom') }} {{ Session::get('prenom') }}
-                <small>Administrateur</small>
+                <small>Technicien</small>
               </p>
             </li>
-            <!-- Menu Body -->
-            <!--li class="user-body">
-              <div class="col-xs-12 text-center">
-                <a href="">Profile</a>
-              </div>
-            </li-->
-            <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
                 <a data-toggle="modal" data-target="#modalUpdateProfile" class="btn btn-default btn-flat">Profile</a>

@@ -1,4 +1,4 @@
-@extends('layouts.master_2')
+@extends('layouts.master_admin')
 
 @section('content-head')
   <h1>Espace Administrateur<small></small></h1>
@@ -143,6 +143,7 @@
             <script>
             $(document).ready(function() {
               $('#techs').DataTable( {
+                "order": [[ 0, "asc" ]],
                 "language": {
                   "lengthMenu": "Display _MENU_ records per page",
                   "zeroRecords": "Nothing found - sorry",
@@ -175,7 +176,7 @@
                         <td>{{ $item->login }}</td>
                         <td>{{ $item->last_login }}</td>
                         <td>
-                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}" );'></i>
+                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}","{{ $item->login }}" );'></i>
                           <i class="fa fa-trash-o" onclick="deleteTechnicienFunction({{ $item->id }},'{{ $item->nom }}');" ></i>
                         </td>
                       </tr>
@@ -188,8 +189,6 @@
             <!-- /.box-body -->
           </div>
         </div>
-
-
 
       </section>
 
@@ -248,11 +247,6 @@
 
       </section>
     </div>
-
-
-
-
-
 
 
 
@@ -788,6 +782,7 @@
               <script>
               $(document).ready(function() {
                 $('#listTechs').DataTable( {
+                  "order": [[ 0, "asc" ]],
                   "language": {
                     "lengthMenu": "Display _MENU_ records per page",
                     "zeroRecords": "Nothing found - sorry",
@@ -869,25 +864,18 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                     {{-- Login --}}
                     <div class="form-group has-feedback">
                       <label>Login</label>
                       <input type="text" class="form-control" placeholder="Login" name="login" required>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     {{-- Password --}}
                     <div class="form-group has-feedback">
                       <label>Password</label>
                       <input type="text" class="form-control" placeholder="Password" name="password" required>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    {{-- Password Confirmation --}}
-                    <div class="form-group has-feedback">
-                      <label>Confirmation</label>
-                      <input type="text" class="form-control" placeholder="confirmation" name="password_confirmation" required>
                     </div>
                   </div>
                 </div>
@@ -927,37 +915,101 @@
                     {{-- Nom --}}
                     <div class="form-group has-feedback">
                       <label>Nom</label>
-                      <input type="text" class="form-control" placeholder="Nom" name="nom" required>
+                      <input type="text" class="form-control" placeholder="Nom" name="nom" id="update_nom_technicien" required>
                     </div>
                   </div>
                   <div class="col-md-6">
                     {{-- Prenom --}}
                     <div class="form-group has-feedback">
                       <label>Prenom</label>
-                      <input type="text" class="form-control" placeholder="Prenom" name="prenom">
+                      <input type="text" class="form-control" placeholder="Prenom" name="prenom" id="update_prenom_technicien">
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                     {{-- Login --}}
                     <div class="form-group has-feedback">
                       <label>Login</label>
-                      <input type="text" class="form-control" placeholder="Login" name="login" required>
+                      <input type="text" class="form-control" placeholder="Login" name="login" id="update_login_technicien" required>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     {{-- Password --}}
                     <div class="form-group has-feedback">
                       <label>Password</label>
-                      <input type="text" class="form-control" placeholder="Password" name="password" required>
+                      <input type="text" class="form-control" placeholder="Password" name="password">
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    {{-- Password Confirmation --}}
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Modifier</button>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Technicien       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+
+
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Profile       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    <div class="CRUD Profile">
+      {{-- *****************************    update Profile    ************************************************* --}}
+      <div class="modal fade" id="modalUpdateProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- Form update Profile --}}
+        <form method="POST" action="{{ route('admin.updateProfile') }}">
+          @csrf
+          <input type="hidden" name="id" value="{{ Session::get('id_user') }}">
+
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modification de l'équipement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{-- Nom --}}
                     <div class="form-group has-feedback">
-                      <label>Confirmation</label>
-                      <input type="text" class="form-control" placeholder="confirmation" name="password_confirmation" required>
+                      <label>Nom</label>
+                      <input type="text" class="form-control" placeholder="Nom" name="nom" value="{{ Session::get('nom') }}" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    {{-- Prenom --}}
+                    <div class="form-group has-feedback">
+                      <label>Prenom</label>
+                      <input type="text" class="form-control" placeholder="Prenom" name="prenom" value="{{ Session::get('prenom') }}">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-5">
+                    {{-- Login --}}
+                    <div class="form-group has-feedback">
+                      <label>Login</label>
+                      <input type="text" class="form-control" placeholder="Login" name="login" value="{{ Session::get('login') }}" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    {{-- Password --}}
+                    <div class="form-group has-feedback">
+                      <label>Password</label>
+                      <input type="text" class="form-control" placeholder="Password" name="password" title='Pour garder votre ancien mot de passe, laissez le champ "Password" vide.'>
+                      <span>Pour garder votre ancien mot de passe, laissez le champ "Password" vide.</span>
                     </div>
                   </div>
                 </div>
