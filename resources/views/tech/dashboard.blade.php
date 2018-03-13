@@ -130,8 +130,8 @@
 
     </section>
   </div>
-  <div class="row">
 
+  <div class="row">
     <section class="col-lg-12 connectedSortable">
       <div class="nav-tabs-custom">
         {{-- *************************   List Interventions   *****************************  --}}
@@ -143,9 +143,10 @@
               <div class="btn-group">
                 <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a data-toggle="modal" data-target="#modalListFamille"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">Imprimer la liste</a></li>
+                  <li>
+                    <a href="#">Imprimer la liste</a>
+                  </li>
                 </ul>
               </div>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>

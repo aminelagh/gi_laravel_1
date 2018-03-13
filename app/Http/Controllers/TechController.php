@@ -14,6 +14,7 @@ use \App\Models\Type_intervention;
 use \App\Models\Equipement;
 use \App\Models\Intervention;
 use \DB;
+
 class TechController extends Controller
 {
   public function home(){

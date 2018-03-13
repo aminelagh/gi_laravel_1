@@ -23,7 +23,10 @@ Route::get('/', function () {
   return view('welcome');
 })->name('welcome');
 
-//routes protected by Tech-Middleware
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@   Tech-routes   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Route::group(['middleware' => 'tech'], function () {
   Route::get('/tech', 'TechController@home')->name('tech-dash');
 
@@ -32,12 +35,14 @@ Route::group(['middleware' => 'tech'], function () {
 
   //add Intervention
   Route::post('/addIntervention', 'TechController@addIntervention')->name('tech.addIntervention');
-
-
-
 });
 
-//routes protected by Admin-Middleware
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@   admin-routes   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Route::group(['middleware' => 'admin'], function () {
   Route::get('/admin','AdminController@home')->name('admin-dash');
 
@@ -68,19 +73,23 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/updateTechnicien', 'AdminController@updateTechnicien')->name('updateTechnicien');
   Route::post('/deleteTechnicien', 'AdminController@deleteTechnicien')->name('deleteTechnicien');
 
-});
+  //pdf ------------------------------------------------------------------------
+  Route::post('/printI','pdfController@printInterventions')->name('printInterventions');
+  Route::post('/printT','pdfController@printTechniciens')->name('printTechniciens');
+  Route::post('/printE','pdfController@printEquipements')->name('printEquipements');
+  Route::post('/printF','pdfController@printFamilles')->name('printFamilles');
 
-
-Route::get('/e', function(){
-  return view('example');
 });
 
 //Authentification
-
-
 //login
 Route::get('/login', 'AuthenticationController@login')->name('login');
 Route::post('/login', 'AuthenticationController@submitLogin')->name('submitLogin');
 
 //logout
 Route::get('/logout', 'AuthenticationController@logout')->name('logout');
+
+//error Routes
+Route::get('{any}', function () {
+  return redirect()->back()->with('alert_warning',"Oups !<br>il paraît que vous avez pris le mauvais chemin");
+});

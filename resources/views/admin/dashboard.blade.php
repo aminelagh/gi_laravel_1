@@ -28,7 +28,7 @@
                   <li><a data-toggle="modal" data-target="#modalAddFamille"><i class="fa fa-fw fa-plus"></i> Créer une famille d'équiement</a></li>
                   <li><a data-toggle="modal" data-target="#modalListFamille"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">Imprimer la liste</a></li>
+                  <li><a onclick="printFamillesfunction();">Imprimer la liste</a></li>
                 </ul>
               </div>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -74,7 +74,7 @@
                     <li><a data-toggle="modal" data-target="#modalAddEquipement"><i class="fa fa-fw fa-plus"></i> Créer un nouveau équipement</a></li>
                     <li><a data-toggle="modal" data-target="#modalListEquipement"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Imprimer la liste</a></li>
+                    <li><a onclick="printEquipementsfunction();">Imprimer la liste</a></li>
                   </ul>
                 </div>
                 <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -133,7 +133,7 @@
                     <li><a data-toggle="modal" data-target="#modalAddTechnicien"><i class="fa fa-fw fa-plus"></i> Créer un nouveau technicien</a></li>
                     <li><a data-toggle="modal" data-target="#modalListTechnicien"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Imprimer la liste</a></li>
+                    <li><a onclick="printTechniciensFunction();">Imprimer la liste</a></li>
                   </ul>
                 </div>
                 <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -163,7 +163,7 @@
                 <table id="techs" class="table table-hover" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Technicient</th>
+                      <th>Technicien</th>
                       <th>Login</th>
                       <th>Last Login</th>
                       <th>Tools</th>
@@ -240,6 +240,92 @@
                   @endforeach
                 @endif
               </ul>
+            </div>
+            <div class="box-footer clearfix no-border"></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+
+
+    <div class="row">
+      <section class="col-lg-12 connectedSortable">
+
+        <div class="nav-tabs-custom">
+          {{-- *************************   List Interventions   *****************************  --}}
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title"> Interventions <span class="badge badge-info badge-pill"></span></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <div class="btn-group">
+                  <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li class="divider"></li>
+                    <li>
+                      <a onclick="printInterventionsFunction();">Imprimer la liste</a>
+                    </li>
+                  </ul>
+                </div>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+            <script>
+            $(document).ready(function() {
+              $('#interventions').DataTable( {
+                "order": [[ 0, "asc" ]],
+                "language": {
+                  "lengthMenu": "Display _MENU_ records per page",
+                  "zeroRecords": "Nothing found - sorry",
+                  "info": "Showing page _PAGE_ of _PAGES_",
+                  "infoEmpty": "No records available",
+                  "infoFiltered": "(filtered from _MAX_ total records)"
+                }
+              } );
+            } );
+            </script>
+
+            <div class="box-body">
+
+              @if($interventions->count()==0)
+                <span class="text"><i>Aucune Intervention</i></span>
+              @else
+                <table id="interventions" class="table table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Technicien</th>
+                      <th>Equipement</th>
+                      <th>Famille</th>
+                      <th>Description</th>
+                      <th>Date</th>
+                      <th>Durée</th>
+                      <th>Tools</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($interventions as $item)
+                      <tr>
+                        <td title="{{ $item->description_ti }}">{{ $item->nom_ti }}</td>
+                        <td title="{{ $item->login_u }}">{{ $item->nom_u }} {{ $item->prenom_u }}</td>
+                        <td>{{ $item->description_e }}</td>
+                        <td>{{ $item->description_f }}</td>
+                        <td>{{ $item->description }}</td>
+                        <td>{{ $item->date }}</td>
+                        <td>{{ $item->duree }}</td>
+                        <td>
+                          <i class="fa fa-fw fa-info-circle" data-toggle="modal" data-target="#modalInfoIntervention"
+                          onclick="infoInterventionFunction('{{ $item->nom_ti }}', '{{ $item->description_e }}','{{ $item->nom_u }} {{ $item->prenom_u }}' , '{{ $item->description }}', '{{ $item->date }}', '{{ $item->duree }}');" ></i>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              @endif
+
             </div>
             <div class="box-footer clearfix no-border"></div>
           </div>
@@ -800,7 +886,7 @@
                 <table id="listTechs" class="table table-hover" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Technicient</th>
+                      <th>Technicien</th>
                       <th>Login</th>
                       <th>Last Login</th>
                       <th>Tools</th>
@@ -1026,9 +1112,41 @@
         </form>
       </div>
     </div>
-    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Famille       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Profile       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
 
+    {{-- ****************************************************************************************** --}}
+    {{-- ****************************** Print Forms *********************************************** --}}
+    <form id="formPrintInterventions" method="POST" action="{{ route('printInterventions') }}" target="_blank">
+      @csrf
+    </form>
+    <form id="formPrintTechniciens" method="POST" action="{{ route('printTechniciens') }}" target="_blank">
+      @csrf
+    </form>
+    <form id="formPrintEquipements" method="POST" action="{{ route('printEquipements') }}" target="_blank">
+      @csrf
+    </form>
+    <form id="formPrintFamille" method="POST" action="{{ route('printFamilles') }}" target="_blank">
+      @csrf
+    </form>
+
+    <script>
+    function printInterventionsFunction(){
+      document.getElementById("formPrintInterventions").submit();
+    }
+    function printTechniciensFunction(){
+      document.getElementById("formPrintTechniciens").submit();
+    }
+    function printEquipementsFunction(){
+      alert('a');
+      document.getElementById("formPrintEquipements").submit();
+    }
+    function printFamillesFunction(){
+      document.getElementById("formPrintFamille").submit();
+    }
+    </script>
+    {{-- ****************************** Print Forms *********************************************** --}}
+    {{-- ****************************************************************************************** --}}
   @endsection
 
 
