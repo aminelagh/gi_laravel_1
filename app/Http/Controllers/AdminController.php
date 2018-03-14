@@ -57,182 +57,225 @@ class AdminController extends Controller{
   }
   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+  //Stats **********************************************************************
+  public function stats(Request $request){
 
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //Delete Famille *************************************************************
-  public function deleteFamille(Request $request){
-    try{
-      $item = Famille::find($request->id_famille);
-      $item->delete();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de suppression de la famille.<br>Message d'erreur: ".$e->getMessage().".");
+    $id_type_intervention = 0;
+    $where_type_intervention = "";
+    if($id_type_intervention!=0){
+      $where_type_intervention = " and id_type_intervention = ".$id_type_intervention." ";
     }
-    return redirect()->back()->with('alert_success',"Suppression de la famille réussie");
-  }
-  //add Famille ****************************************************************
-  public function addFamille(Request $request){
-    try{
-      $item = new Famille();
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de création de la famille.<br>Message d'erreur: ".$e->getMessage().".");
+
+    $id_equipement = 0;
+    $where_id_equipement = "";
+    if($id_equipement!=0){
+      $where_id_equipement = " and id_equipement = ".$id_equipement." ";
     }
-    return redirect()->back()->with('alert_success',"Création de la famille réussi");
-  }
-  //update Famille *************************************************************
-  public function updateFamille(Request $request){
-    try{
-      $item = Famille::find($request->id_famille);
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de modification de la famille.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Modification de la famille réussi");
-  }
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //Delete Equipement ****************************************************
-  public function deleteEquipement(Request $request){
-    try{
-      $item = Equipement::find($request->id_equipement);
-      $item->delete();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de suppression de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Suppression de l'equipement réussi");
-  }
-  //add Equipement *******************************************************
-  public function addEquipement(Request $request){
-    try{
-      $item = new Equipement();
-      $item->id_famille = $request->id_famille;
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de création de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Création de l'equipement réussi");
-  }
-  //update Equipement ****************************************************
-  public function updateEquipement(Request $request){
-    try{
-      $item = Equipement::find($request->id_equipement);
-      $item->id_famille = $request->id_famille;
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de modification de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Modification de l'equipement reussie");
-  }
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //Delete Type_intervention ***************************************************
-  public function deleteType_intervention(Request $request){
-    try{
-      $item = Type_intervention::find($request->id_type_intervention);
-      $item->delete();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de suppression du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Suppression du type de l'intervention réussi");
-  }
-  //add Type_intervention ******************************************************
-  public function addType_intervention(Request $request){
-    try{
-      $item = new Type_intervention();
-      $item->nom = $request->nom;
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de création du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Création du type de l'intervention réussi");
-  }
-  //update Type_intervention ***************************************************
-  public function updateType_intervention(Request $request){
-    try{
-      $item = Type_intervention::find($request->id_type_intervention);
-      $item->nom = $request->nom;
-      $item->description = $request->description;
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de modification du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Modification du type de l'intervention reussie");
-  }
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //Delete Technicien **********************************************************
-  public function deleteTechnicien(Request $request){
-    try{
-      $item = User::find($request->id);
-      $item->delete();
-      $role_user = Role_user::where('user_id', $request->id)->get()->first();
-      $role_user->delete();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de suppression du technicien.<br>Message d'erreur: ".$e->getMessage().".");
-    }
-    return redirect()->back()->with('alert_success',"Suppression du technicien réussie");
-  }
-  //add Technicien *************************************************************
-  public function addTechnicien(Request $request){
-    //ajouter et activer le compte de l'utilisateur
-    try{
-      $user = Sentinel::registerAndActivate($request->all());
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de création du technicien. Message d'erreur: ".$e->getMessage()." ");
-    }
-    //chercher le role pour l'utilisateur
-    $role = Sentinel::findRoleBySlug('tech');
-    //associer le role a l'utilisateur
-    $role->users()->attach($user);
-    return redirect()->back()->with('alert_success',"Création du technicien réussie");
-  }
-  //update Technicien **********************************************************
-  public function updateTechnicien(Request $request){
-    try{
-      $item = User::find($request->id);
-      $item->nom = $request->nom;
-      $item->prenom = $request->prenom;
-      $item->login = $request->login;
-      if( $request->password != "" ){
-        $item->password = password_hash($request->password, PASSWORD_DEFAULT);
+
+    $data = collect(DB::select(
+      "SELECT
+      month(date) as month,YEAR(date) AS year,
+      sum(duree) as duree,
+      sum(hour(duree)) as h,sum(minute(duree)) as m,sum(second(duree)) as s,
+      sum( SECOND(duree)/3600 + MINUTE(duree)/60 + HOUR(duree)) as 'totalH',
+      sum( SECOND(duree)/60 + MINUTE(duree) + HOUR(duree)*60 ) as 'totalM',
+      sum( SECOND(duree) + MINUTE(duree)*60 + HOUR(duree)*3600) as 'totalS'
+      FROM interventions
+      WHERE true " . $where_type_intervention . " ".$where_id_equipement."
+      GROUP BY MONTH(date),YEAR(date)
+      ORDER BY YEAR(date),MONTH(date) ;"));
+
+      //foreach ($data as $item)  dump($item);
+      $familles = Famille::all();
+      $equipements = collect(DB::select('SELECT id_equipement, e.id_famille, e.description as description_e, f.description as description_f  FROM equipements e LEFT JOIN familles f ON e.id_famille=f.id_famille ORDER BY e.created_at desc'));
+      $type_interventions = Type_intervention::orderBy('created_at', 'desc')->get();
+      $techs = collect(DB::select("select * from users u where u.id in (select user_id from role_users where role_id in (select id from roles where slug='tech')) order by u.created_at desc;"));
+
+      if($request->has('id_equipement')){
+        return view('admin.stats')->withData($data)->withFamilles($familles)->withEquipements($equipements)->withTypes($type_interventions)->withTechs($techs)->with('selected_id_equipement',$request->id_equipement)->with('alert_info',"OUI");        
       }
-      $item->save();
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de modification du Technicien.<br>Message d'erreur: ".$e->getMessage().".");
+      else
+      return view('admin.stats')->withData($data)->withFamilles($familles)->withEquipements($equipements)->withTypes($type_interventions)->withTechs($techs);
+
     }
-    return redirect()->back()->with('alert_success',"Modification du Technicien réussi");
-  }
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-  //updating Session variable after updating the current user's Profil
-  public static function updateSession(){
-    try{
-      $user = User::find(Session::get('id_user'));
-      Session::put('login', $user->login);
-      Session::put('nom', $user->nom);
-      Session::put('prenom', $user->prenom);
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur de mise a jour de votre session.<br>Message d'erreur: ".$e->getMessage());
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //Delete Famille *************************************************************
+    public function deleteFamille(Request $request){
+      try{
+        $item = Famille::find($request->id_famille);
+        $item->delete();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de suppression de la famille.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Suppression de la famille réussie");
     }
-  }
+    //add Famille ****************************************************************
+    public function addFamille(Request $request){
+      try{
+        $item = new Famille();
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de création de la famille.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Création de la famille réussi");
+    }
+    //update Famille *************************************************************
+    public function updateFamille(Request $request){
+      try{
+        $item = Famille::find($request->id_famille);
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de modification de la famille.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Modification de la famille réussi");
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //Delete Equipement ****************************************************
+    public function deleteEquipement(Request $request){
+      try{
+        $item = Equipement::find($request->id_equipement);
+        $item->delete();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de suppression de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Suppression de l'equipement réussi");
+    }
+    //add Equipement *******************************************************
+    public function addEquipement(Request $request){
+      try{
+        $item = new Equipement();
+        $item->id_famille = $request->id_famille;
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de création de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Création de l'equipement réussi");
+    }
+    //update Equipement ****************************************************
+    public function updateEquipement(Request $request){
+      try{
+        $item = Equipement::find($request->id_equipement);
+        $item->id_famille = $request->id_famille;
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de modification de l'equipement.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Modification de l'equipement reussie");
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //Delete Type_intervention ***************************************************
+    public function deleteType_intervention(Request $request){
+      try{
+        $item = Type_intervention::find($request->id_type_intervention);
+        $item->delete();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de suppression du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Suppression du type de l'intervention réussi");
+    }
+    //add Type_intervention ******************************************************
+    public function addType_intervention(Request $request){
+      try{
+        $item = new Type_intervention();
+        $item->nom = $request->nom;
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de création du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Création du type de l'intervention réussi");
+    }
+    //update Type_intervention ***************************************************
+    public function updateType_intervention(Request $request){
+      try{
+        $item = Type_intervention::find($request->id_type_intervention);
+        $item->nom = $request->nom;
+        $item->description = $request->description;
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de modification du type de l'intervention.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Modification du type de l'intervention reussie");
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //Delete Technicien **********************************************************
+    public function deleteTechnicien(Request $request){
+      try{
+        $item = User::find($request->id);
+        $item->delete();
+        $role_user = Role_user::where('user_id', $request->id)->get()->first();
+        $role_user->delete();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de suppression du technicien.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Suppression du technicien réussie");
+    }
+    //add Technicien *************************************************************
+    public function addTechnicien(Request $request){
+      //ajouter et activer le compte de l'utilisateur
+      try{
+        $user = Sentinel::registerAndActivate($request->all());
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de création du technicien. Message d'erreur: ".$e->getMessage()." ");
+      }
+      //chercher le role pour l'utilisateur
+      $role = Sentinel::findRoleBySlug('tech');
+      //associer le role a l'utilisateur
+      $role->users()->attach($user);
+      return redirect()->back()->with('alert_success',"Création du technicien réussie");
+    }
+    //update Technicien **********************************************************
+    public function updateTechnicien(Request $request){
+      try{
+        $item = User::find($request->id);
+        $item->nom = $request->nom;
+        $item->prenom = $request->prenom;
+        $item->login = $request->login;
+        if( $request->password != "" ){
+          $item->password = password_hash($request->password, PASSWORD_DEFAULT);
+        }
+        $item->save();
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de modification du Technicien.<br>Message d'erreur: ".$e->getMessage().".");
+      }
+      return redirect()->back()->with('alert_success',"Modification du Technicien réussi");
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-  /*
-  public function register(){
-  $roles = Role::all();
-  return view('admin.register')->withRoles($roles);
-}*/
 
-//valider l'enregistremenet de l'utilisateur
-/*public function submitAddUser(Request $request){
-//ajouter et activer le compte de l'utilisateur
-try{
-$user = Sentinel::registerAndActivate($request->all());
+    //updating Session variable after updating the current user's Profil
+    public static function updateSession(){
+      try{
+        $user = User::find(Session::get('id_user'));
+        Session::put('login', $user->login);
+        Session::put('nom', $user->nom);
+        Session::put('prenom', $user->prenom);
+      }catch(Exception $e){
+        return redirect()->back()->with('alert_danger',"Erreur de mise a jour de votre session.<br>Message d'erreur: ".$e->getMessage());
+      }
+    }
+
+    /*
+    public function register(){
+    $roles = Role::all();
+    return view('admin.register')->withRoles($roles);
+  }*/
+
+  //valider l'enregistremenet de l'utilisateur
+  /*public function submitAddUser(Request $request){
+  //ajouter et activer le compte de l'utilisateur
+  try{
+  $user = Sentinel::registerAndActivate($request->all());
 }catch(Exception $e){
 return redirect('/register')->withAlertDanger("Erreur de création de l'utilisateur. Message d'erreur: ".$e->getMessage()." ");
 }

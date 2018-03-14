@@ -79,6 +79,10 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/printE','pdfController@printEquipements')->name('printEquipements');
   Route::post('/printF','pdfController@printFamilles')->name('printFamilles');
 
+  //stats ----------------------------------------------------------------------
+  Route::get('/stats','AdminController@stats')->name('stats');
+  Route::post('/stats','AdminController@stats')->name('submitStats');
+
 });
 
 //Authentification

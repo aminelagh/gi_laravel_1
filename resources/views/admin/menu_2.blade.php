@@ -17,8 +17,14 @@
       <li class="header"></li>
 
       <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> <span>Option 1</span>
+        <a href="{{ route('admin-dash') }}">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ route('stats') }}">
+          <i class="fa fa-files-o"></i> <span>Stats</span>
         </a>
       </li>
 
