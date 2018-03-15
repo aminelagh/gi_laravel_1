@@ -83,6 +83,8 @@ Route::group(['middleware' => 'admin'], function () {
   Route::get('/stats','AdminController@stats')->name('stats');
   Route::post('/stats','AdminController@stats')->name('submitStats');
 
+  Route::post('/printStats','pdfController@printStats')->name('printStats');
+
 });
 
 //Authentification

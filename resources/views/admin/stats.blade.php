@@ -11,74 +11,87 @@
 @section('content')
 
   <div class="row">
+    <section class="col-lg-12 connectedSortable">
 
+      <form id="formFiltreStats" method="POST" action="{{ route('submitStats') }}">
+        @csrf
 
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title"> Filtre <span class="badge badge-info badge-pill"></span></h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div>
 
-    <form id="formFiltreStats" method="POST" action="{{ route('submitStats') }}">
-      @csrf
-      <div class="row">
-        <div class="col-lg-3">
-          {{-- id_famille Equipement --}}
-          <div class="form-group has-feedback">
-            <label>Famille d'equipement</label>
-            <select  class="form-control" name="id_famille">
-              @isset($familles)
-                @if($familles->count()>0)
+          <div class="box-body">
+
+            <div class="col-lg-3">
+              {{-- Type_interventions --}}
+              <div class="form-group has-feedback">
+                <label>Type intervention</label>
+                <select name="id_type_intervention" class="form-control" id="id_type_intervention">
+                  <option value="null">Tous les types d'intervention</option>
+                  @foreach($types as $item)
+                    <option value="{{ $item->id_type_intervention }}">{{ $item->nom }}</option>
+                  @endForeach
+                </select>
+              </div>
+            </div>
+
+            <div class="col-lg-3">
+              {{-- id_famille Equipement --}}
+              <div class="form-group has-feedback">
+                <label>Famille d'equipement</label>
+                <select  class="form-control" name="id_famille" id="id_famille">
+                  <option value="null">Toute les familles</option>
                   @foreach ($familles as $item)
-                    <option value="{{ $item->id_famille }}">{{ $item->description }}</option>
+                    <option value="{{ $item->id_famille }}" {{ isset($selected_id_famille) && $selected_id_famille == $item->id_famille ? 'selected' : ''  }} >{{ $item->description }}</option>
                   @endforeach
-                @endif
-              @endisset
-            </select>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-lg-3">
+              {{-- Equipement --}}
+              <div class="form-group has-feedback">
+                <label>Equipement</label>
+                <select name="id_equipement" class="form-control" id="id_equipement">
+                  <option value="null">Tous les équipements</option>
+                  @foreach($equipements as $item)
+                    <option value="{{ $item->id_equipement }}" {{ isset($selected_id_equipement) && $selected_id_equipement == $item->id_equipement ? 'selected' : ''  }}>{{ $item->description_e }} ({{ $item->description_f }})</option>
+                  @endForeach
+                </select>
+              </div>
+            </div>
+
+            <div class="col-lg-3">
+              {{-- Technicien --}}
+              <div class="form-group has-feedback">
+                <label>Technicien</label>
+                <select name="id_technicien" class="form-control" id="id_technicien">
+                  <option value="null">Tous les techniciens</option>
+                  @foreach($techs as $item)
+                    <option value="{{ $item->id }}" {{ isset($selected_id_technicien) && $selected_id_technicien == $item->id ? 'selected' : ''  }}>{!! $item->nom." ".$item->prenom !!}</option>
+                  @endForeach
+                </select>
+              </div>
+            </div>
+
+          </div>
+          <div class="box-footer clearfix no-border">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+              <input type="submit" value="Filtrer" class="btn btn-block btn-primary btn-md" name="submitFiltre">
+            </div>
+            <div class="col-lg-4"></div>
           </div>
         </div>
 
-        <div class="col-lg-3">
-          {{-- Equipement --}}
-          <div class="form-group has-feedback">
-            <label>Equipement</label>
-            <select name="id_equipement" class="form-control">
-              @foreach($equipements as $item)
-                <option value="{{ $item->id_equipement }}" {{ isset($selected_id_equipement) && $selected_id_equipement == $item->id_equipement ? 'selected' : ''  }}>{{ $item->description_e }} ({{ $item->description_f }})</option>
-              @endForeach
-            </select>
-          </div>
-        </div>
+      </form>
 
-        <div class="col-lg-3">
-          {{-- Type_interventions --}}
-          <div class="form-group has-feedback">
-            <label>Type intervention</label>
-            <select name="id_type_intervention" class="form-control">
-              @foreach($types as $item)
-                <option value="{{ $item->id_type_intervention }}">{{ $item->nom }}</option>
-              @endForeach
-            </select>
-          </div>
-        </div>
-
-        <div class="col-lg-3">
-          {{-- Technicien --}}
-          <div class="form-group has-feedback">
-            <label>Technicien</label>
-            <select name="id_type_intervention" class="form-control" oninput="submitForm();">
-              @foreach($techs as $item)
-                <option value="{{ $item->id }}">{!! $item->nom." ".$item->prenom !!}</option>
-              @endForeach
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="row" align="center">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4">
-          <input type="submit" value="Ajouter" class="btn btn-block btn-primary btn-md">
-        </div>
-        <div class="col-lg-4"></div>
-      </div>
-
-    </form>
-
+    </section>
   </div>
 
   <script>
@@ -90,14 +103,43 @@
 
   <hr>
 
+  {{-- ****************************************************************************************** --}}
+  {{-- ****************************** Print Forms *********************************************** --}}
+  <form id="formPrintStats" method="POST" action="{{ route('printStats') }}" target="_blank">
+    @csrf
+    <input type="hidden" name="id_type_intervention" id="print_id_type_intervention">
+    <input type="hidden" name="id_famille" id="print_id_famille">
+    <input type="hidden" name="id_equipement" id="print_id_equipement">
+    <input type="hidden" name="id_technicien" id="print_id_technicien">
+  </form>
+
+  <script>
+  function printStatsFunction(){
+    let id_type_intervention = document.getElementById("id_type_intervention").value;
+    let id_famille = document.getElementById("id_famille").value;
+    let id_equipement = document.getElementById("id_equipement").value;
+    let id_technicien = document.getElementById("id_technicien").value;
+
+    document.getElementById("print_id_type_intervention").value = id_type_intervention;
+    document.getElementById("print_id_famille").value = id_famille;
+    document.getElementById("print_id_equipement").value = id_equipement;
+    document.getElementById("print_id_technicien").value = id_technicien;
+    //alert("id_type_intervention: "+id_type_intervention+"\n id_famille: "+id_famille+"\n id_equipement: "+id_equipement+"\n id_technicien: "+id_technicien);
+    document.getElementById("formPrintStats").submit();
+  }
+  </script>
+  {{-- ****************************** Print Forms *********************************************** --}}
+  {{-- ****************************************************************************************** --}}
+
+
   <div class="row">
     <section class="col-lg-12 connectedSortable">
 
       <div class="nav-tabs-custom">
-        {{-- *************************   List Interventions   *****************************  --}}
+        {{-- *************************   List Stats   *****************************  --}}
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title"> Interventions <span class="badge badge-info badge-pill"></span></h3>
+            <h3 class="box-title"> Somme des durée par mois <span class="badge badge-info badge-pill"></span></h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               <div class="btn-group">
@@ -105,7 +147,7 @@
                 <ul class="dropdown-menu" role="menu">
                   <li class="divider"></li>
                   <li>
-                    <a onclick="printInterventionsFunction();">Imprimer la liste</a>
+                    <a onclick="printStatsFunction();">Imprimer la liste</a>
                   </li>
                 </ul>
               </div>
@@ -156,8 +198,87 @@
           <div class="box-footer clearfix no-border"></div>
         </div>
       </div>
-
     </section>
+  </div>
+
+  <div class="row">
+
+
+
+    <section class="col-lg-12 connectedSortable">
+
+      <div class="nav-tabs-custom">
+        {{-- *************************   List Interventions   *****************************  --}}
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title"> Interventions <span class="badge badge-info badge-pill"></span></h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <div class="btn-group">
+                <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="divider"></li>
+                  <li>
+                    <a onclick="printStatsFunction();">Imprimer la liste</a>
+                  </li>
+                </ul>
+              </div>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div>
+
+          <script>
+          $(document).ready(function() {
+            $('#tableDetails').DataTable( {
+              "order": [[ 5, "asc" ]]
+            } );
+          } );
+          </script>
+
+          <div class="box-body">
+
+            @if($data->count()==0)
+              <span class="text"><i>Aucune Intervention</i></span>
+            @else
+              <table id="tableDetails" class="table table-hover" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Technicien</th>
+                    <th>Equipement</th>
+                    <th>Famille</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Durée</th>
+                    <th>Tools</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($interventions as $item)
+                    <tr>
+                      <td title="{{ $item->description_ti }}">{{ $item->nom_ti }}</td>
+                      <td title="{{ $item->login_u }}">{{ $item->nom_u }} {{ $item->prenom_u }}</td>
+                      <td>{{ $item->description_e }}</td>
+                      <td>{{ $item->description_f }}</td>
+                      <td>{{ $item->description }}</td>
+                      <td>{{ $item->date }}</td>
+                      <td>{{ $item->duree }}</td>
+                      <td>
+                        <i class="fa fa-fw fa-info-circle" data-toggle="modal" data-target="#modalInfoIntervention"
+                        onclick="infoInterventionFunction('{{ $item->nom_ti }}', '{{ $item->description_e }}','{{ $item->nom_u }} {{ $item->prenom_u }}' , '{{ $item->description }}', '{{ $item->date }}', '{{ $item->duree }}');" ></i>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            @endif
+
+          </div>
+          <div class="box-footer clearfix no-border"></div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
 
