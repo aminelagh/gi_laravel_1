@@ -13,11 +13,11 @@
 
 
 
-
-
 Route::get('/s', function () {
   dump(Session::all());
 });
+
+Route::get('/e','ExcelController@e1' );
 
 Route::get('/', function () {
   return view('welcome');

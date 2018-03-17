@@ -136,7 +136,6 @@ class pdfController extends Controller
       }catch(Exception $e){
         return redirect()->back()->with('alert_danger',"Erreur d'impression.<br>Message d'erreur: <b>".$e->getMessage()."</b>");
       }
-
     }
 
 
