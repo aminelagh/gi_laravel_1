@@ -78,12 +78,21 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/printT','pdfController@printTechniciens')->name('printTechniciens');
   Route::post('/printE','pdfController@printEquipements')->name('printEquipements');
   Route::post('/printF','pdfController@printFamilles')->name('printFamilles');
+  Route::post('/printStats','pdfController@printStats')->name('printStats');
+
+  //export to Excel ------------------------------------------------------------
+  Route::post('/exportI','ExcelController@exportInterventions')->name('exportInterventions');
+  Route::post('/exportT','ExcelController@exportTechniciens')->name('exportTechniciens');
+  Route::post('/exportE','ExcelController@exportEquipements')->name('exportEquipements');
+  Route::post('/exportF','ExcelController@exportFamilles')->name('exportFamilles');
+  Route::post('/exportF2','ExcelController@exportFamilles2')->name('exportFamilles2');
+  Route::post('/exportStats','ExcelController@exportStats')->name('exportStats');
 
   //stats ----------------------------------------------------------------------
   Route::get('/stats','AdminController@stats')->name('stats');
   Route::post('/stats','AdminController@stats')->name('submitStats');
 
-  Route::post('/printStats','pdfController@printStats')->name('printStats');
+
 
 });
 

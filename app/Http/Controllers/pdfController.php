@@ -61,7 +61,7 @@ class pdfController extends Controller
       $pdf = PDF::loadView('pdf/equipements',['data'=> $data]);
       $pdf->setPaper('a4', 'landscape');
       return $pdf->stream();
-      return $pdf->download('Equipements.pdf');
+    //  return $pdf->download('Equipements.pdf');
 
     }catch(Exception $e){
       return redirect()->back()->with('alert_danger',"Erreur d'impression.<br>Message d'erreur: <b>".$e->getMessage()."</b>");

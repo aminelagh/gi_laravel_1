@@ -2,9 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Title_1</title>
+  <title>Stats</title>
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-
 
   <style>
   <?php include(public_path().'/bootstrap/css/bootstrap.min.css');?>
@@ -21,7 +20,6 @@
           <h1>Liste des interventions</h1>
         </div>
       </section>
-
 
       <section class="content">
         <div class="row">

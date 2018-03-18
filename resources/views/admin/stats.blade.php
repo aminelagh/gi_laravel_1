@@ -18,7 +18,7 @@
 
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title"> Filtre <span class="badge badge-info badge-pill"></span></h3>
+            <h3 class="box-title"> Filtre </h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -34,7 +34,7 @@
                 <select name="id_type_intervention" class="form-control" id="id_type_intervention">
                   <option value="null">Tous les types d'intervention</option>
                   @foreach($types as $item)
-                    <option value="{{ $item->id_type_intervention }}">{{ $item->nom }}</option>
+                    <option value="{{ $item->id_type_intervention }}" {{ isset($selected_id_type_intervention) && $selected_id_type_intervention == $item->id_type_intervention ? 'selected' : ''  }}>{{ $item->nom }}</option>
                   @endForeach
                 </select>
               </div>
@@ -130,6 +130,33 @@
   </script>
   {{-- ****************************** Print Forms *********************************************** --}}
   {{-- ****************************************************************************************** --}}
+  {{-- ****************************************************************************************** --}}
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
+  <form id="formExportStats" method="POST" action="{{ route('exportStats') }}" target="_blank">
+    @csrf
+    <input type="hidden" name="id_type_intervention" id="export_id_type_intervention">
+    <input type="hidden" name="id_famille" id="export_id_famille">
+    <input type="hidden" name="id_equipement" id="export_id_equipement">
+    <input type="hidden" name="id_technicien" id="export_id_technicien">
+  </form>
+
+  <script>
+  function exportStatsFunction(){
+    let id_type_intervention = document.getElementById("id_type_intervention").value;
+    let id_famille = document.getElementById("id_famille").value;
+    let id_equipement = document.getElementById("id_equipement").value;
+    let id_technicien = document.getElementById("id_technicien").value;
+
+    document.getElementById("export_id_type_intervention").value = id_type_intervention;
+    document.getElementById("export_id_famille").value = id_famille;
+    document.getElementById("export_id_equipement").value = id_equipement;
+    document.getElementById("export_id_technicien").value = id_technicien;
+    //alert("id_type_intervention: "+id_type_intervention+"\n id_famille: "+id_famille+"\n id_equipement: "+id_equipement+"\n id_technicien: "+id_technicien);
+    document.getElementById("formExportStats").submit();
+  }
+  </script>
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
+  {{-- ****************************************************************************************** --}}
 
 
   <div class="row">
@@ -145,10 +172,8 @@
               <div class="btn-group">
                 <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
                 <ul class="dropdown-menu" role="menu">
-                  <li class="divider"></li>
-                  <li>
-                    <a onclick="printStatsFunction();">Imprimer la liste</a>
-                  </li>
+                  <li><a onclick="printStatsFunction();">Imprimer la liste</a></li>
+                  <li><a onclick="exportStatsFunction();">Exporter</a></li>
                 </ul>
               </div>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -370,6 +395,21 @@
   }
   </script>
   {{-- ****************************** Print Forms *********************************************** --}}
+  {{-- ****************************************************************************************** --}}
+
+  {{-- ****************************************************************************************** --}}
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
+  <form id="formExportInterventions" method="POST" action="{{ route('exportInterventions') }}" target="_blank">
+    @csrf
+  </form>
+  <script>
+  function exportInterventions(){
+    document.getElementById("formExportInterventions").submit();
+  }
+
+
+  </script>
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
   {{-- ****************************************************************************************** --}}
 @endsection
 

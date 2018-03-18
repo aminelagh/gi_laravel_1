@@ -6,9 +6,6 @@
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
   <!-- Bootstrap 3.3.2 -->
-
-  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
   <style>
   <?php include(public_path().'/bootstrap/css/bootstrap.min.css');?>
 </style>
@@ -36,7 +33,6 @@
                 <tr>
                   <th>Equipement</th>
                   <th>Famille</th>
-                  <th>Date de création</th>
                 </tr>
               </thead>
               <tbody>
@@ -44,8 +40,6 @@
                   <tr>
                     <td>{{ $item->description_e }}</td>
                     <td>{{ $item->description_f }}</td>
-                    <td>{{ $item->login }}</td>
-                    <td>{{ $item->created_at }}</td>
                   </tr>
                 @endforeach
               </tbody>

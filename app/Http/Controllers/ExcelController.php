@@ -67,7 +67,7 @@ class ExcelController extends Controller
   }
 
   //Exporter la liste des Equipements ------------------------------------------
-  public function exportEquipements(){
+  public function exportFamilles2(){
     try{
       Excel::create('Filename', function($excel) {
         $excel->sheet('Familles et Equipements', function($sheet) {
@@ -80,6 +80,23 @@ class ExcelController extends Controller
               $sheet->appendRow(array("",$equipement->description));
             }
             $sheet->appendRow(array(null));
+          }
+        });
+      })->export('xls');
+
+    }catch(Exception $e){
+      return redirect()->back()->with('alert_danger',"Erreur !<br>Message d'erreur: ".$e->getMessage());
+    }
+  }
+
+  //Exporter la liste des Equipements ------------------------------------------
+  public function exportEquipements(){
+    try{
+      Excel::create('Filename', function($excel) {
+        $excel->sheet('Familles et Equipements', function($sheet) {
+          $equipements = Equipement::all();
+          foreach ($equipements as $equipement) {
+            $sheet->appendRow(array($equipement->description));
           }
         });
       })->export('xls');
@@ -109,7 +126,7 @@ class ExcelController extends Controller
   }
 
   //Exporter la liste des Interventions ----------------------------------------
-  public function interventions(){
+  public function exportInterventions(){
     try{
       Excel::create('interventions', function($excel) {
         $excel->sheet('interventions', function($sheet) {
@@ -141,8 +158,6 @@ class ExcelController extends Controller
 
   //Exporter la liste des stats ------------------------------------------------
   public function exportStats(Request $request){
-    //dd($request->all());
-
     $where_id_equipement = "";
     $where_type_intervention = "";
     $where_id_user = "";
@@ -169,44 +184,74 @@ class ExcelController extends Controller
       $where_id_user = " and i.id_user = ".$id_technicien." ";
     }
 
+    $GLOBALS['where_id_equipement'] = $where_id_equipement;
+    $GLOBALS['where_type_intervention'] = $where_type_intervention;
+    $GLOBALS['where_id_user'] = $where_id_user;
+    $GLOBALS['where_id_famille'] = $where_id_famille;
 
-    $data = collect(DB::select(
-      "SELECT
-      month(date) as month,YEAR(date) AS year,
-      sum(duree) as duree,
-      sum(hour(duree)) as h,sum(minute(duree)) as m,sum(second(duree)) as s,
-      sum( SECOND(duree)/3600 + MINUTE(duree)/60 + HOUR(duree)) as 'totalH',
-      sum( SECOND(duree)/60 + MINUTE(duree) + HOUR(duree)*60 ) as 'totalM',
-      sum( SECOND(duree) + MINUTE(duree)*60 + HOUR(duree)*3600) as 'totalS'
-      FROM interventions i
-      WHERE true ".$where_type_intervention." ".$where_id_famille." ".$where_id_equipement." ".$where_id_user."
-      GROUP BY MONTH(date),YEAR(date)
-      ORDER BY YEAR(date),MONTH(date) ;"));
+    try{
+      Excel::create('Stats', function($excel) {
 
+        //sheet Stats --------
+        $excel->sheet('Stats', function($sheet) {
 
+          $where_id_equipement = $GLOBALS['where_id_equipement'];
+          $where_type_intervention = $GLOBALS['where_type_intervention'];
+          $where_id_user = $GLOBALS['where_id_user'];
+          $where_id_famille = $GLOBALS['where_id_famille'];
 
-      $interventions = collect(DB::select(
-        "select i.description, i.date, i.duree, i.created_at,
-        ti.nom as nom_ti, ti.description as description_ti,
-        e.description as description_e,
-        f.description as description_f,
-        u.nom as nom_u, u.prenom as prenom_u, u.login as login_u
-        from
-        interventions i left join type_interventions ti on i.id_type_intervention = ti.id_type_intervention
-        left join users u on i.id_user = u.id
-        left join equipements e on e.id_equipement = i.id_equipement
-        left join familles f on e.id_famille = f.id_famille
-        WHERE true ".$where_type_intervention." ".$where_id_famille." ".$where_id_equipement." ".$where_id_user."
-        order by i.created_at desc"));
+          $data = collect(DB::select(
+            "SELECT
+            month(date) as month,YEAR(date) AS year,
+            sum(duree) as duree,
+            sum(hour(duree)) as h,sum(minute(duree)) as m,sum(second(duree)) as s,
+            sum( SECOND(duree)/3600 + MINUTE(duree)/60 + HOUR(duree)) as 'totalH',
+            sum( SECOND(duree)/60 + MINUTE(duree) + HOUR(duree)*60 ) as 'totalM',
+            sum( SECOND(duree) + MINUTE(duree)*60 + HOUR(duree)*3600) as 'totalS'
+            FROM interventions i
+            WHERE true ".$where_type_intervention." ".$where_id_famille." ".$where_id_equipement." ".$where_id_user."
+            GROUP BY MONTH(date),YEAR(date)
+            ORDER BY YEAR(date),MONTH(date) ;"));
 
-        try{
-        $pdf = PDF::loadView('pdf/stats',['data'=> $data, 'interventions'=>$interventions]);
-        $pdf->setPaper('a4', 'landscape');
-        return $pdf->stream();
-        //return $pdf->download('stats.pdf');
+            $sheet->appendRow( array("Mois","Total en H","Total en M","Total en S","Durée Totale"));
+            foreach ($data as $item) {
+              $sheet->appendRow( array( getMonthName($item->month)." ".$item->year,number_format($item->totalH, 3),number_format($item->totalM, 3),number_format($item->totalS, 3),getSommeDuree($item->h ,$item->m ,$item->s)) );
+            }
 
-      }catch(Exception $e){
-        return redirect()->back()->with('alert_danger',"Erreur !.<br>Message d'erreur: <b>".$e->getMessage()."</b>");
+          });
+
+          //Sheet Details
+          $excel->sheet('Interventions', function($sheet) {
+
+            $where_id_equipement = $GLOBALS['where_id_equipement'];
+            $where_type_intervention = $GLOBALS['where_type_intervention'];
+            $where_id_user = $GLOBALS['where_id_user'];
+            $where_id_famille = $GLOBALS['where_id_famille'];
+
+            $interventions = collect(DB::select(
+              "select i.description, i.date, i.duree, i.created_at,
+              ti.nom as nom_ti, ti.description as description_ti,
+              e.description as description_e,
+              f.description as description_f,
+              u.nom as nom_u, u.prenom as prenom_u, u.login as login_u
+              from
+              interventions i left join type_interventions ti on i.id_type_intervention = ti.id_type_intervention
+              left join users u on i.id_user = u.id
+              left join equipements e on e.id_equipement = i.id_equipement
+              left join familles f on e.id_famille = f.id_famille
+              WHERE true ".$where_type_intervention." ".$where_id_famille." ".$where_id_equipement." ".$where_id_user."
+              order by i.created_at desc"));
+
+              $sheet->appendRow( array("Type d'intervention","Technicien","Equipement","Famille","Intervention","Date","Durée"));
+              foreach ($interventions as $item) {
+                $sheet->appendRow( array($item->nom_u,$item->nom_u." ".$item->prenom_u,$item->description_e,$item->description_f,$item->description,$item->date,$item->duree ));
+              }
+            });
+
+          })->export('xls');
+
+        }catch(Exception $e){
+          return redirect()->back()->with('alert_danger',"Erreur !<br>Message d'erreur: ".$e->getMessage());
+        }
       }
     }
-}
