@@ -68,7 +68,7 @@
                   {{-- Equipement --}}
                   <div class="form-group has-feedback">
                     <label>Equipement</label>
-                    <select name="id_equipement" class="form-control">
+                    <select id="id_equipement" class="selectpicker" data-live-search="true" name="id_equipement">
                       @foreach($equipements as $item)
                         <option value="{{ $item->id_equipement }}">{{ $item->description_e }} ({{ $item->description_f }})</option>
                       @endForeach

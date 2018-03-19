@@ -39,6 +39,7 @@
           $(document).ready(function() {
             $('#interventions').DataTable( {
               "order": [[ 0, "asc" ]],
+              "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
               "language": {
                 "lengthMenu": "Display _MENU_ records per page",
                 "zeroRecords": "Nothing found - sorry",
@@ -98,56 +99,7 @@
 
   <div class="row">
 
-    <section class="col-lg-3 connectedSortable">
-
-      <div class="nav-tabs-custom">
-        {{-- *************************   Familles   *****************************  --}}
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title">Familles <span class="badge badge-info badge-pill"> {{ $familles->count() }}</span></h3>
-            <div class="box-tools pull-right">
-              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              <div class="btn-group">
-                <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a data-toggle="modal" data-target="#modalAddFamille"><i class="fa fa-fw fa-plus"></i> Créer une famille d'équiement</a></li>
-                  <li><a data-toggle="modal" data-target="#modalListFamille"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
-                  <li class="divider"></li>
-                  <li><a onclick="printEquipements();">Imprimer la liste</a></li>
-                  <li><a onclick="exportFamillesFunction();">Exporter</a></li>
-                  <li><a onclick="exportFamilles2Function();">Exporter 2</a></li>
-                </ul>
-              </div>
-              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-            </div>
-          </div>
-
-          <div class="box-body">
-            <ul class="todo-list">
-              @foreach ($familles->take(5) as $item)
-                <li>
-                  <span class="handle">
-                    <i class="fa fa-ellipsis-v"></i>
-                    <i class="fa fa-ellipsis-v"></i>
-                  </span>
-                  <!-- checkbox -->
-                  <input type="checkbox" value="" name=""/>
-                  <!-- todo text -->
-                  <span class="text">{{ $item->description }}</span>
-                  <!--small class="label label-info"><i class="fa fa-clock-o"></i> 2 mins</small-->
-                  <div class="tools">
-                    <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateFamille" onclick='updateFamilleFunction({{ $item->id_famille }}, "{{ $item->description }}" );'></i>
-                    <i class="fa fa-trash-o" onclick="deleteFamilleFunction({{ $item->id_famille }},'{{ $item->description }}');" ></i>
-                  </div>
-                </li>
-
-              @endforeach
-            </ul>
-          </div>
-          <div class="box-footer clearfix no-border"></div>
-        </div>
-      </div>
-
+    <section class="col-lg-9 connectedSortable">
       <div class="nav-tabs-custom">
         {{-- *************************   Equipements   *****************************  --}}
         <div class="box box-success">
@@ -159,7 +111,7 @@
                   <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a data-toggle="modal" data-target="#modalAddEquipement"><i class="fa fa-fw fa-plus"></i> Créer un nouveau équipement</a></li>
-                    <li><a data-toggle="modal" data-target="#modalListEquipement"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
+                    <!--li><a data-toggle="modal" data-target="#modalListEquipement"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li-->
                     <li class="divider"></li>
                     <li><a onclick="printEquipements();">Imprimer la liste</a></li>
                     <li><a onclick="exportEquipementsFunction();">Exporter</a></li>
@@ -170,48 +122,121 @@
               </div>
             </div>
 
+            <script>
+            $(document).ready(function() {
+              $('#equipements').DataTable( {
+                "pagingType": "full_numbers",
+                "order": [[ 0, "asc" ]],
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                "columnDefs": [
+                  {targets: 0 , visible: true,},
+                  {targets: 1 , visible: true,},
+                  {targets: 2 , visible: true,},
+                ],
+                "language": {
+                  "lengthMenu": "Display _MENU_ records per page",
+                  "zeroRecords": "Nothing found - sorry",
+                  "info": "Showing page _PAGE_ of _PAGES_",
+                  "infoEmpty": "No records available",
+                  "infoFiltered": "(filtered from _MAX_ total records)"
+                }
+              } );
+            } );
+            </script>
+
             <div class="box-body">
-              <ul class="todo-list">
-                @isset($equipements)
-                  @if($equipements!=null && $equipements->count()==0)
-                    <li>
-                      <span class="text"><i>Aucun equipement enregistré</i></span>
-                    </li>
-                  @else
-                    @foreach ($equipements->take(5) as $item)
-                      <li>
-                        <span class="handle">
-                          <i class="fa fa-ellipsis-v"></i>
-                          <i class="fa fa-ellipsis-v"></i>
-                        </span>
-                        <!-- checkbox -->
-                        <input type="checkbox" value="" name=""/>
-                        <!-- todo text -->
-                        <span class="text">{{ $item->description_e }}</span>
-                        <small class="label label-info"> {{ $item->description_f }}</small>
-                        <div class="tools">
-                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateEquipement" onclick='updateEquipementFunction({{ $item->id_equipement }}, {{ $item->id_famille }}, "{{ $item->description_e }}" );'></i>
-                          <i class="fa fa-trash-o" onclick="deleteEquipementFunction({{ $item->id_equipement }},'{{ $item->description_e }}');" ></i>
-                        </div>
-                      </li>
+              @if($equipements->count()==0)
+                <span class="text"><i>Aucun equipement</i></span>
+              @else
+                <table id="equipements" class="table table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Equipement</th>
+                      <th>Famille</th>
+                      <th>Outils</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($equipements as $item)
+                      <tr>
+                        <td>{{ $item->description_e }}</td>
+                        <td>{{ $item->description_f }}</td>
+                        <td>
+                          <div class="tools">
+                            <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateEquipement" onclick='updateEquipementFunction({{ $item->id_equipement }}, {{ $item->id_famille }}, "{{ $item->description_e }}" );'></i>
+                            <i class="fa fa-trash-o" onclick="deleteEquipementFunction({{ $item->id_equipement }},'{{ $item->description_e }}');" ></i>
+                          </div>
+                        </td>
+                      </tr>
                     @endforeach
-                  @endif
-                @endisset
-              </ul>
+                  </tbody>
+                </table>
+              @endif
             </div>
             <div class="box-footer clearfix no-border"></div>
           </div>
 
         </div>
-
       </section>
 
-      <section class="col-lg-6 connectedSortable">
+      <section class="col-lg-3 connectedSortable">
+        <div class="nav-tabs-custom">
+          {{-- *************************   Familles   *****************************  --}}
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Familles <span class="badge badge-info badge-pill"> {{ $familles->count() }}</span></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <div class="btn-group">
+                  <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a data-toggle="modal" data-target="#modalAddFamille"><i class="fa fa-fw fa-plus"></i> Créer une famille d'équiement</a></li>
+                    <li><a data-toggle="modal" data-target="#modalListFamille"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
+                    <li class="divider"></li>
+                    <li><a onclick="printEquipements();">Imprimer la liste</a></li>
+                    <li><a onclick="exportFamillesFunction();">Exporter</a></li>
+                    <li><a onclick="exportFamilles2Function();">Exporter 2</a></li>
+                  </ul>
+                </div>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+            <div class="box-body">
+              <ul class="todo-list">
+                @foreach ($familles->take(5) as $item)
+                  <li>
+                    <span class="handle">
+                      <i class="fa fa-ellipsis-v"></i>
+                      <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <!-- checkbox -->
+                    <input type="checkbox" value="" name=""/>
+                    <!-- todo text -->
+                    <span class="text">{{ $item->description }}</span>
+                    <!--small class="label label-info"><i class="fa fa-clock-o"></i> 2 mins</small-->
+                    <div class="tools">
+                      <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateFamille" onclick='updateFamilleFunction({{ $item->id_famille }}, "{{ $item->description }}" );'></i>
+                      <i class="fa fa-trash-o" onclick="deleteFamilleFunction({{ $item->id_famille }},'{{ $item->description }}');" ></i>
+                    </div>
+                  </li>
+
+                @endforeach
+              </ul>
+            </div>
+            <div class="box-footer clearfix no-border"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+    <div class="row">
+      <section class="col-lg-8 connectedSortable">
 
         <div class="nav-tabs-custom">
           {{-- *************************   Techniciens   *****************************  --}}
           <div class="box box-warning">
-
             <div class="box-header with-border">
               <h3 class="box-title">Techniciens <span class="badge badge-info badge-pill"> {{ $techs->count() }}</span></h3>
               <div class="box-tools pull-right">
@@ -246,7 +271,6 @@
             </script>
 
             <div class="box-body">
-
               @if($techs->count()==0)
                 <span class="text"><i>Aucun technicien</i></span>
               @else
@@ -274,7 +298,6 @@
                   </tbody>
                 </table>
               @endif
-
             </div>
             <!-- /.box-body -->
           </div>
@@ -282,7 +305,7 @@
 
       </section>
 
-      <section class="col-lg-3 connectedSortable">
+      <section class="col-lg-4 connectedSortable">
 
         <div class="nav-tabs-custom">
           {{-- *************************   Type_intervention   *****************************  --}}
@@ -1184,9 +1207,6 @@
     {{-- ************************** Export To Excel Forms ***************************************** --}}
     {{-- ****************************************************************************************** --}}
   @endsection
-
-
-
 
   @section('menu_1')
     @include('admin.menu_1')

@@ -17,7 +17,8 @@
   <!-- Ionicons -->
   <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 
-
+  <!-- Bootstrap-Select -->
+  <link rel="stylesheet" href="bootstrap-select/bootstrap-select.min.css">
 
   <!-- Theme style -->
   <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
@@ -37,6 +38,9 @@
 
   <!-- Datatables -->
   <script src="datatables/datatables.min.js" type="text/javascript"></script>
+
+  <!-- Bootstrap-Select -->
+  <script src="bootstrap-select/bootstrap-select.min.js"></script>
 
   <!-- Morris chart
   <link href="plugins/morris/morris.css" rel="stylesheet" type="text/css" />  -->

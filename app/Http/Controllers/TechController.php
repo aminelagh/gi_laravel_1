@@ -20,23 +20,23 @@ class TechController extends Controller
   public function home(){
     //$this->updateSession();
     //$familles = Famille::orderBy('created_at', 'desc')->get();
-    $equipements = collect(DB::select('SELECT id_equipement, e.id_famille, e.description as description_e, f.description as description_f  FROM equipements e LEFT JOIN familles f ON e.id_famille=f.id_famille ORDER BY e.created_at desc'));
+    $equipements = collect(DB::select('SELECT id_equipement, e.id_famille, e.description as description_e, f.description as description_f  FROM equipements e LEFT JOIN familles f ON e.id_famille=f.id_famille ORDER BY f.description desc'));
     //$techs = collect(DB::select("select * from users u where u.id in (select user_id from role_users where role_id in (select id from roles where slug='tech')) order by u.created_at desc;"));
     $type_interventions = Type_intervention::orderBy('created_at', 'asc')->get();
     //$interventions = Intervention::all();
 
     $interventions = collect(DB::select("select
-                          i.description, i.date, i.duree, i.created_at,
-                          ti.nom as nom_ti, ti.description as description_ti,
-                          e.description as description_e,
-                          f.description as description_f,
-                          u.nom as nom_u, u.prenom as prenom_u, u.login as login_u
-                          from
-                          interventions i left join type_interventions ti on i.id_type_intervention = ti.id_type_intervention
-                          left join users u on i.id_user = u.id
-                          left join equipements e on e.id_equipement = i.id_equipement
-                          left join familles f on e.id_famille = f.id_famille
-                          order by i.created_at desc"));
+    i.description, i.date, i.duree, i.created_at,
+    ti.nom as nom_ti, ti.description as description_ti,
+    e.description as description_e,
+    f.description as description_f,
+    u.nom as nom_u, u.prenom as prenom_u, u.login as login_u
+    from
+    interventions i left join type_interventions ti on i.id_type_intervention = ti.id_type_intervention
+    left join users u on i.id_user = u.id
+    left join equipements e on e.id_equipement = i.id_equipement
+    left join familles f on e.id_famille = f.id_famille
+    order by i.created_at desc"));
     //foreach($data as $i)
     //dump($i);
 

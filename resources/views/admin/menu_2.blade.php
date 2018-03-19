@@ -28,7 +28,7 @@
         </a>
       </li>
 
-      <li class="treeview">
+      <!--li class="treeview">
         <a href="#">
           <i class="fa fa-files-o"></i>
           <span>Option 2</span>
@@ -52,7 +52,7 @@
       <li class="header">Menu</li>
       <li><a href="#"><i class="fa fa-circle-o text-danger"></i> Important</a></li>
       <li><a href="#"><i class="fa fa-circle-o text-warning"></i> Warning</a></li>
-      <li><a href="#"><i class="fa fa-circle-o text-info"></i> Information</a></li>
+      <li><a href="#"><i class="fa fa-circle-o text-info"></i> Information</a></li-->
     </ul>
   </section>
   <!-- /.sidebar -->

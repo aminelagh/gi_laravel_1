@@ -22,7 +22,7 @@
     </div><!-- /.login-logo -->
     <div class="login-box-body">
       <p class="login-box-msg">Veuillez vous authentifier</p>
-      <form action="/login" method="POST">
+      <form action="{{ route('login') }}" method="POST">
         @csrf
         <div class="form-group has-feedback">
           <input type="text" class="form-control" placeholder="Login" name="login" value="{{ old('login') }}" required/>
