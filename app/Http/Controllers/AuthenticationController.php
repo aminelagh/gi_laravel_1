@@ -13,7 +13,6 @@ use \App\Models\Role_user;
 class AuthenticationController extends Controller
 {
 
-
   //login *****************************************************************************
   public function login(){
     if( Sentinel::check() ){
@@ -29,34 +28,35 @@ class AuthenticationController extends Controller
   public function submitLogin(Request $request){
 
     try {
-      if (request()->has('remember'))
-      $user = Sentinel::authenticateAndRemember(request()->all());
-      else
       $user = Sentinel::authenticate(request()->all());
-
       if (Sentinel::check()) {
         Session::put('id_user', $user->id);
         Session::put('role', $this->getRole());
         Session::put('login', $user->login);
         Session::put('nom', $user->nom);
         Session::put('prenom', $user->prenom);
-
         return $this->redirectToSpace();
-
-      } else return redirect()->back()->withInput()->withAlertWarning("<b>login et/ou mot de passe incorrect</b>")->withTimerWarning(2000);
-
+      } else {
+        return redirect()->back()->withInput()->with("alert_warning","<b>login et/ou mot de passe incorrect</b>");
+      }
     } catch (ThrottlingException $e) {
-
-      return redirect()->back()->withInput()->with('alert_success', "<b>Une activité suspecte s'est produite sur votre adresse IP, l'accès vous est refusé pour " . $e->getDelay() . " seconde (s)</b>")->withTimerDanger($e->getDelay() * 1000);
-
+      return redirect()->back()->withInput()->with("alert_warning", "<b>Une activité suspecte s'est produite sur votre adresse IP, l'accès vous est refusé pour " . $e->getDelay() . " seconde (s)</b>")->withTimerDanger($e->getDelay() * 1000);
+    }
+    catch (Exception $e) {
+      return redirect()->route('login')->withInput()->with("alert_danger", "Erreur !<br>Message d'erreur:  ".$e->getMessage()." ");
     }
   }
 
   //Deconnexion ***********************************************************************
   public function logout(){
-    Sentinel::logout();
-    Session::flush();
-    return redirect('/');
+    try{
+      Sentinel::logout();
+      Session::flush();
+      return redirect('/');
+    }
+    catch (Exception $e) {
+      return redirect()->back()->withInput()->with('alert_danger', "Erreur !<br>Message d'erreur:  ".$e->getMessage()."");
+    }
   }
 
   //redirect to proper dashboard ******************************************************
@@ -66,7 +66,7 @@ class AuthenticationController extends Controller
     }elseif( Sentinel::inRole('tech') ){
       return redirect()->route('tech-dash');
     }else{
-      return redirect()->route('errorPage')->withAlertDanger("Le rôle de l'utilisateur authentifié n'est pas répertorié, veuillez contacter l'administrateur de l'application.");
+      return redirect()->route('errorPage')->with("alert_danger","Le rôle de l'utilisateur authentifié n'est pas répertorié, veuillez contacter l'administrateur de l'application.");
     }
   }
 
@@ -81,29 +81,5 @@ class AuthenticationController extends Controller
     }
   }
 
-
-  /*
-  public function submitLogin(Request $request){
-
-  try{
-  $user = Sentinel::authenticate($request->all());
-}catch(Exception $e){
-return redirect()->back()->withAlertDanger("Erreur d'Authentification. Message d'erreur: ".$e->getMessage()." ");
-}
-
-if( Sentinel::check() ){
-//function's body bollow
-return self::redirectToSpace();
-}
-else {
-return redirect()->route('login')->withAlertWarning("Login et/ou Mot de passe incorrect")->withInput();
-}
-}
-
-public function logout(){
-Sentinel::logout();
-return redirect('/');
-}
-*/
 
 }

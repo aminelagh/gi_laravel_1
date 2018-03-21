@@ -1,6 +1,6 @@
 
 <!-- notify -->
-<script src="notify/bootstrap-notify.min.js" type="text/javascript"></script>
+<script src="public/notify/bootstrap-notify.min.js" type="text/javascript"></script>
 
 <script>
 
@@ -147,8 +147,6 @@ $.notify({
 
 @endif
 {{-- /.alert warning --}}
-
-
 
 
 </script>

@@ -182,8 +182,15 @@
 
           <script>
           $(document).ready(function() {
-            $('#table').DataTable( {
-              //"order": [[ 0, "asc" ]]
+            $('#stats').DataTable( {
+              "pagingType": "full_numbers",
+              "order": [[ 0, "asc" ]],
+              "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+              "columnDefs": [
+                {targets: 0 , visible: false,},
+                {targets: 1 , visible: true,},
+                {targets: 2 , visible: true,},
+              ],
             } );
           } );
           </script>
@@ -193,11 +200,11 @@
             @if($data->count()==0)
               <span class="text"><i>Aucune Intervention</i></span>
             @else
-              <table id="table1" class="table table-hover" width="100%" cellspacing="0">
+              <table id="stats" class="table table-hover" width="100%" cellspacing="0">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Mois</th>
-                    <th>Duree</th>
                     <th>en Heurs</th>
                     <th>en Min</th>
                     <th>en Sec</th>
@@ -207,8 +214,8 @@
                 <tbody>
                   @foreach ($data as $item)
                     <tr>
+                      <td>{{ $loop->iteration }}</td>
                       <td>{{ getMonthName($item->month) }} {{ $item->year }}</td>
-                      <td>{{ $item->duree }}</td>
                       <td>{{ number_format($item->totalH, 3) }}</td>
                       <td>{{ number_format($item->totalM, 2) }}</td>
                       <td>{{ number_format($item->totalS, 2) }}</td>

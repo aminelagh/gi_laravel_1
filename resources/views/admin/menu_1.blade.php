@@ -17,7 +17,7 @@
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <img src="img/admin.png" class="img-circle" alt="User Image" />
+              <img src="public/img/admin.png" class="img-circle" alt="User Image" />
               <p>
                 {{ Session::get('nom') }} {{ Session::get('prenom') }}
                 <small>Administrateur</small>

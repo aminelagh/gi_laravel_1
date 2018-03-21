@@ -4,39 +4,29 @@
   <meta charset="UTF-8">
   <title>{{ $title or 'Gestion des interventions' }}</title>
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-
   <!-- Bootstrap 3.3.2 -->
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- FontAwesome 4.3.0 -->
-  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="public/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <!-- Ionicons 2.0.0 -->
-  <link href="css/ionicons.min.css" rel="stylesheet" type="text/css" />
+  <link href="public/css/ionicons.min.css" rel="stylesheet" type="text/css" />
   <!-- Font Awesome Icons -->
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <!-- Ionicons -->
   <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-
-
-
   <!-- Theme style -->
-  <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-
+  <link href="public/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
   <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-  <link href="dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
-
+  <link href="public/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
   <!-- iCheck -->
-  <link href="plugins/iCheck/flat/blue.css" rel="stylesheet" type="text/css" />
-
+  <link href="public/plugins/iCheck/flat/blue.css" rel="stylesheet" type="text/css" />
   <!-- Datatables -->
-  <link href="datatables/datatables.min.css" rel="stylesheet" type="text/css" />
-
+  <link href="public/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
   <!-- jQuery 2.1.3 -->
-  <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
-
-
+  <script src="public/plugins/jQuery/jQuery-2.1.3.min.js"></script>
   <!-- Datatables -->
-  <script src="datatables/datatables.min.js" type="text/javascript"></script>
+  <script src="public/datatables/datatables.min.js" type="text/javascript"></script>
 
   <!-- Morris chart
   <link href="plugins/morris/morris.css" rel="stylesheet" type="text/css" />  -->
@@ -53,11 +43,9 @@
 <body class="skin-blue">
   <div class="wrapper">
 
-
     @yield('menu_1')
 
     @yield('menu_2')
-
 
     <!-- Right side column. Contains the navbar and content of the page -->
     <div class="content-wrapper">
@@ -72,14 +60,11 @@
     </div>
     <!-- /.content-wrapper -->
 
-
     <!-- Footer -->
     @include("layouts.footer")
     <!-- /.Footer -->
 
-
   </div><!-- ./wrapper -->
-
 
   <!-- jQuery UI 1.11.2
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js" type="text/javascript"></script>  -->
@@ -88,7 +73,7 @@
   $.widget.bridge('uibutton', $.ui.button);
   </script>
   <!-- Bootstrap 3.3.2 JS -->
-  <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="public/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
   <!-- Morris.js charts
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
   <script src="plugins/morris/morris.min.js" type="text/javascript"></script>   -->
@@ -106,20 +91,17 @@
   <!-- Bootstrap WYSIHTML5
   <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script> -->
   <!-- iCheck -->
-  <script src="plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+  <script src="public/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
   <!-- Slimscroll -->
-  <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+  <script src="public/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
   <!-- FastClick -->
-  <script src='plugins/fastclick/fastclick.min.js'></script>
+  <script src='public/plugins/fastclick/fastclick.min.js'></script>
   <!-- AdminLTE App -->
-  <script src="dist/js/app.min.js" type="text/javascript"></script>
-
+  <script src="public/dist/js/app.min.js" type="text/javascript"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="dist/js/pages/dashboard.js" type="text/javascript"></script>
-
+  <script src="public/dist/js/pages/dashboard.js" type="text/javascript"></script>
   <!-- AdminLTE for demo purposes -->
-  <script src="dist/js/demo.js" type="text/javascript"></script>
-
+  <script src="public/dist/js/demo.js" type="text/javascript"></script>
 
   @include('layouts.alerts')
 
