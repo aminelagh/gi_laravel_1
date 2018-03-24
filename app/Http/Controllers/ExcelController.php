@@ -106,8 +106,8 @@ class ExcelController extends Controller
     }
   }
 
-  //Exporter la liste des Techniciens ------------------------------------------
-  public function exportTechniciens(){
+  //Exporter la liste des Users ------------------------------------------
+  public function exportUsers(){
     try{
       Excel::create('Filename', function($excel) {
         $excel->sheet('Familles et Equipements', function($sheet) {

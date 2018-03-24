@@ -43,7 +43,7 @@ class pdfController extends Controller
     }
   }
 
-  public function printTechniciens(){
+  public function printUsers(){
     try{
       $data = collect(DB::select("select * from users u where u.id in (select user_id from role_users where role_id in (select id from roles where slug='tech')) order by u.created_at desc;"));
       $pdf = PDF::loadView('pdf/technicients',['data'=> $data]);

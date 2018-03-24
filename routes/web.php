@@ -38,8 +38,6 @@ Route::group(['middleware' => 'tech'], function () {
 });
 
 
-
-
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@   admin-routes   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -69,20 +67,20 @@ Route::group(['middleware' => 'admin'], function () {
   Route::post('/deleteType_intervention', 'AdminController@deleteType_intervention')->name('deleteType_intervention');
 
   //Technicien -----------------------------------------------------------------
-  Route::post('/addTechnicien', 'AdminController@addTechnicien')->name('addTechnicien');
-  Route::post('/updateTechnicien', 'AdminController@updateTechnicien')->name('updateTechnicien');
-  Route::post('/deleteTechnicien', 'AdminController@deleteTechnicien')->name('deleteTechnicien');
+  Route::post('/addUser', 'AdminController@addUser')->name('addUser');
+  Route::post('/updateUser', 'AdminController@updateUser')->name('updateUser');
+  Route::post('/deleteUser', 'AdminController@deleteUser')->name('deleteUser');
 
   //pdf ------------------------------------------------------------------------
   Route::post('/printI','pdfController@printInterventions')->name('printInterventions');
-  Route::post('/printT','pdfController@printTechniciens')->name('printTechniciens');
+  Route::post('/printU','pdfController@printUsers')->name('printUsers');
   Route::post('/printE','pdfController@printEquipements')->name('printEquipements');
   Route::post('/printF','pdfController@printFamilles')->name('printFamilles');
   Route::post('/printStats','pdfController@printStats')->name('printStats');
 
   //export to Excel ------------------------------------------------------------
   Route::post('/exportI','ExcelController@exportInterventions')->name('exportInterventions');
-  Route::post('/exportT','ExcelController@exportTechniciens')->name('exportTechniciens');
+  Route::post('/exportU','ExcelController@exportUsers')->name('exportUsers');
   Route::post('/exportE','ExcelController@exportEquipements')->name('exportEquipements');
   Route::post('/exportF','ExcelController@exportFamilles')->name('exportFamilles');
   Route::post('/exportF2','ExcelController@exportFamilles2')->name('exportFamilles2');

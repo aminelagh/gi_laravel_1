@@ -235,20 +235,19 @@
       <section class="col-lg-8 connectedSortable">
 
         <div class="nav-tabs-custom">
-          {{-- *************************   Techniciens   *****************************  --}}
+          {{-- *************************   Users   *****************************  --}}
           <div class="box box-warning">
             <div class="box-header with-border">
-              <h3 class="box-title">Techniciens <span class="badge badge-info badge-pill"> {{ $techs->count() }}</span></h3>
+              <h3 class="box-title">Utilisateurs <span class="badge badge-info badge-pill"> {{ $users->count() }}</span></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 <div class="btn-group">
                   <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a data-toggle="modal" data-target="#modalAddTechnicien"><i class="fa fa-fw fa-plus"></i> Créer un nouveau technicien</a></li>
-                    <li><a data-toggle="modal" data-target="#modalListTechnicien"><i class="fa fa-fw fa-bars"></i> Liste complete</a></li>
+                    <li><a data-toggle="modal" data-target="#modalAddUser"><i class="fa fa-fw fa-plus"></i> Créer un nouvel utilisateur</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="printTechniciensFunction();">Imprimer la liste</a></li>
-                    <li><a onclick="exportTechniciensFunction();">Exporter</a></li>
+                    <li><a onclick="printUsersFunction();">Imprimer la liste</a></li>
+                    <li><a onclick="exportUsersFunction();">Exporter</a></li>
                   </ul>
                 </div>
                 <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -257,7 +256,7 @@
 
             <script>
             $(document).ready(function() {
-              $('#techs').DataTable( {
+              $('#users').DataTable( {
                 "order": [[ 0, "asc" ]],
                 "language": {
                   "lengthMenu": "Display _MENU_ records per page",
@@ -271,27 +270,29 @@
             </script>
 
             <div class="box-body">
-              @if($techs->count()==0)
-                <span class="text"><i>Aucun technicien</i></span>
+              @if($users->count()==0)
+                <span class="text"><i>Aucun utilisateur</i></span>
               @else
-                <table id="techs" class="table table-hover" width="100%" cellspacing="0">
+                <table id="users" class="table table-hover" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Technicien</th>
+                      <th>Role</th>
+                      <th>Utilisateur</th>
                       <th>Login</th>
                       <th>Last Login</th>
                       <th>Tools</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($techs->take(5) as $item)
+                    @foreach ($users as $item)
                       <tr>
+                        <td>{{ $item->name }}</td>
                         <td>{{ $item->nom }} {{ $item->prenom }}</td>
                         <td>{{ $item->login }}</td>
                         <td>{{ $item->last_login }}</td>
                         <td>
-                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}","{{ $item->login }}" );'></i>
-                          <i class="fa fa-trash-o" onclick="deleteTechnicienFunction({{ $item->id }},'{{ $item->nom }}');" ></i>
+                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateUser" onclick='updateTechnicienFunction({{ $item->id_user }}, "{{ $item->nom }}", "{{ $item->prenom }}","{{ $item->login }}" );'></i>
+                          <i class="fa fa-trash-o" onclick="deleteUserFunction({{ $item->id_user }},'{{ $item->nom }}');" ></i>
                         </td>
                       </tr>
                     @endforeach
@@ -360,7 +361,6 @@
 
       </section>
     </div>
-
 
 
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
@@ -603,6 +603,7 @@
                   <div class="col-md-5">
                     {{-- id_famille Equipement --}}
                     <div class="form-group has-feedback">
+                      <label>Famille</label>
                       <select  class="form-control" name="id_famille">
                         @isset($familles)
                           @if($familles->count()>0)
@@ -617,6 +618,7 @@
                   <div class="col-md-7">
                     {{-- description Equipement --}}
                     <div class="form-group has-feedback">
+                      <label>Description</label>
                       <input type="text" class="form-control" placeholder="Description" name="description" required >
                     </div>
                   </div>
@@ -858,18 +860,18 @@
 
 
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
-    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Technicien       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Users      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
     <div class="CRUD Technicien">
-      <form id="formDeleteTechnicien" method="POST" action="{{ route('deleteTechnicien') }}">
+      <form id="formDeleteUser" method="POST" action="{{ route('deleteUser') }}">
         @csrf
         <input type="hidden" id="id_technicien" name="id" />
       </form>
       <script>
-      function deleteTechnicienFunction(id_technicien, nom, prenom){
-        var go = confirm('Vos êtes sur les points d\'effacer le technicien: "'+nom+' '+prenom+'".\n voulez-vous continuer?');
+      function deleteUserFunction(id_user, nom, prenom){
+        var go = confirm('Vos êtes sur les points d\'effacer l\'utilisateur: "'+nom+' '+prenom+'".\n voulez-vous continuer?');
         if(go){
-          document.getElementById("id_technicien").value = id_technicien;
-          document.getElementById("formDeleteTechnicien").submit();
+          document.getElementById("id_technicien").value = id_user;
+          document.getElementById("formDeleteUser").submit();
         }
       }
       function updateTechnicienFunction(id_technicien, nom, prenom, login){
@@ -881,79 +883,17 @@
       }
       </script>
 
-      {{-- *****************************    List Technicien    ************************************************ --}}
-      <div class="modal fade" id="modalListTechnicien" role="dialog">
-        <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Liste des Techniciens</h4>
-            </div>
-            <div class="box-body">
-
-              <script>
-              $(document).ready(function() {
-                $('#listTechs').DataTable( {
-                  "order": [[ 0, "asc" ]],
-                  "language": {
-                    "lengthMenu": "Display _MENU_ records per page",
-                    "zeroRecords": "Nothing found - sorry",
-                    "info": "Showing page _PAGE_ of _PAGES_",
-                    "infoEmpty": "No records available",
-                    "infoFiltered": "(filtered from _MAX_ total records)"
-                  }
-                } );
-              } );
-              </script>
-
-              @if($techs->count()==0)
-                <span class="text"><i>Aucun technicien</i></span>
-              @else
-                <table id="listTechs" class="table table-hover" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>Technicien</th>
-                      <th>Login</th>
-                      <th>Last Login</th>
-                      <th>Tools</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($techs as $item)
-                      <tr>
-                        <td>{{ $item->nom }} {{ $item->prenom }}</td>
-                        <td>{{ $item->login }}</td>
-                        <td>{{ $item->last_login }}</td>
-                        <td>
-                          <i class="fa fa-edit" data-toggle="modal" data-target="#modalUpdateTechnicien" onclick='updateTechnicienFunction({{ $item->id }}, "{{ $item->nom }}", "{{ $item->prenom }}" );'></i>
-                          <i class="fa fa-trash-o" onclick="deleteTechnicienFunction({{ $item->id }},'{{ $item->nom }}');" ></i>
-                        </td>
-                      </tr>
-                    @endforeach
-                  </tbody>
-                </table>
-              @endif
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {{-- *****************************    Add Technicien    ********************************************** --}}
-      <div class="modal fade" id="modalAddTechnicien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        {{-- Form add Technicien --}}
-        <form method="POST" action="{{ route('addTechnicien') }}">
+      {{-- *****************************    Add User    ********************************************** --}}
+      <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- Form add User --}}
+        <form method="POST" action="{{ route('addUser') }}">
           @csrf
 
           <div class="modal-dialog" role="document">
             <div class="modal-content">
 
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ajouter un Technicien</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un Utilisateur</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -961,14 +901,25 @@
 
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
+                    {{-- Role --}}
+                    <div class="form-group has-feedback">
+                      <label>Role</label>
+                      <select  class="form-control" name="slug">
+                        @foreach ($roles as $item)
+                          <option value="{{ $item->slug }}">{{ $item->name }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
                     {{-- Nom --}}
                     <div class="form-group has-feedback">
                       <label>Nom</label>
                       <input type="text" class="form-control" placeholder="Nom" name="nom" required>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     {{-- Prenom --}}
                     <div class="form-group has-feedback">
                       <label>Prenom</label>
@@ -1005,10 +956,10 @@
         </form>
       </div>
 
-      {{-- *****************************    update Technicien    ************************************************* --}}
-      <div class="modal fade" id="modalUpdateTechnicien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        {{-- Form update Technicien --}}
-        <form method="POST" action="{{ route('updateTechnicien') }}">
+      {{-- *****************************    update User    ************************************************* --}}
+      <div class="modal fade" id="modalUpdateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- Form update User --}}
+        <form method="POST" action="{{ route('updateUser') }}">
           @csrf
           <input type="hidden" name="id" id="update_id_technicien_technicien">
 
@@ -1016,7 +967,7 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modification de l'équipement</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Modification de l'utilisateur</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -1068,7 +1019,7 @@
         </form>
       </div>
     </div>
-    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Technicien       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+    {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       User       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
     {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
 
 
@@ -1147,7 +1098,7 @@
     <form id="formPrintInterventions" method="POST" action="{{ route('printInterventions') }}" target="_blank">
       @csrf
     </form>
-    <form id="formPrintTechniciens" method="POST" action="{{ route('printTechniciens') }}" target="_blank">
+    <form id="formPrintUsers" method="POST" action="{{ route('printUsers') }}" target="_blank">
       @csrf
     </form>
     <form id="formPrintEquipements" method="POST" action="{{ route('printEquipements') }}" target="_blank">
@@ -1158,8 +1109,8 @@
     function printInterventionsFunction(){
       document.getElementById("formPrintInterventions").submit();
     }
-    function printTechniciensFunction(){
-      document.getElementById("formPrintTechniciens").submit();
+    function printUsersFunction(){
+      document.getElementById("formPrintUsers").submit();
     }
     function printEquipements(){
       alert('a');
@@ -1174,7 +1125,7 @@
     <form id="formExportInterventions" method="POST" action="{{ route('exportInterventions') }}" target="_blank">
       @csrf
     </form>
-    <form id="formExportTechniciens" method="POST" action="{{ route('exportTechniciens') }}" target="_blank">
+    <form id="formExportUsers" method="POST" action="{{ route('exportUsers') }}" target="_blank">
       @csrf
     </form>
     <form id="formExportEquipements" method="POST" action="{{ route('exportEquipements') }}" target="_blank">
@@ -1191,8 +1142,8 @@
     function exportInterventionsFunction(){
       document.getElementById("formExportInterventions").submit();
     }
-    function exportTechniciensFunction(){
-      document.getElementById("formExportTechniciens").submit();
+    function exportUsersFunction(){
+      document.getElementById("formExportUsers").submit();
     }
     function exportEquipementsFunction(){
       document.getElementById("formExportEquipements").submit();
