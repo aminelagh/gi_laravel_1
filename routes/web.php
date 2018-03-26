@@ -35,6 +35,12 @@ Route::group(['middleware' => 'tech'], function () {
 
   //add Intervention
   Route::post('/addIntervention', 'TechController@addIntervention')->name('tech.addIntervention');
+
+  //pdf ------------------------------------------------------------------------
+  Route::post('/printITech','pdfController@printInterventionsTech')->name('printInterventionsTech');
+
+  //export to Excel ------------------------------------------------------------
+  Route::post('/exportITech','ExcelController@exportInterventionsTech')->name('exportInterventionsTech');
 });
 
 

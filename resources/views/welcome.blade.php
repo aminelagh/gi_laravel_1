@@ -37,9 +37,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <!--li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#info">Informations</a>
-          </li>
+          </li-->
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
           </li>
@@ -65,7 +65,7 @@
     </div>
   </header>
 
-  <section class="bg-primary" id="info">
+  <!--section class="bg-primary" id="info">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 mx-auto text-center">
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section-->
 
   <section id="contact">
     <div class="container">
@@ -83,7 +83,7 @@
         <div class="col-lg-8 mx-auto text-center">
           <h2 class="section-heading">Nous-contacter</h2>
           <hr class="my-4">
-          <p class="mb-5">possible!</p>
+          <!--p class="mb-5">possible!</p-->
         </div>
       </div>
       <div class="row">
@@ -95,6 +95,12 @@
           <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
           <p>
             <a href="mailto:amine.laghlabi@gmail.com">amine.laghlabi@gmail.com</a>
+          </p>
+        </div>
+        <div class="col-lg-4 mr-auto text-center">
+          <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
+          <p>
+            <a href="mailto:mehdibahsain@gmail.com">mehdibahsain@gmail.com</a>
           </p>
         </div>
       </div>

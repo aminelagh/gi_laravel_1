@@ -145,7 +145,8 @@
                 <ul class="dropdown-menu" role="menu">
                   <li class="divider"></li>
                   <li>
-                    <a href="#">Imprimer la liste</a>
+                    <li><a onclick="printInterventionsFunction();">Imprimer la liste</a></li>
+                    <li><a onclick="exportInterventionsFunction();">Exporter</a></li>
                   </li>
                 </ul>
               </div>
@@ -393,6 +394,33 @@
   </div>
   {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       Famille       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
   {{--  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  --}}
+
+  {{-- ****************************************************************************************** --}}
+  {{-- ****************************** Print Forms *********************************************** --}}
+  <form id="formPrintInterventionsTech" method="POST" action="{{ route('printInterventionsTech') }}" target="_blank">
+    @csrf
+  </form>
+
+  <script>
+  function printInterventionsFunction(){
+    document.getElementById("formPrintInterventionsTech").submit();
+  }
+  </script>
+  {{-- ****************************** Print Forms *********************************************** --}}
+  {{-- ****************************************************************************************** --}}
+
+  {{-- ****************************************************************************************** --}}
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
+  <form id="formExportInterventionsTech" method="POST" action="{{ route('exportInterventionsTech') }}" target="_blank">
+    @csrf
+  </form>
+  <script>
+  function exportInterventionsFunction(){
+    document.getElementById("formExportInterventionsTech").submit();
+  }
+  </script>
+  {{-- ************************** Export To Excel Forms ***************************************** --}}
+  {{-- ****************************************************************************************** --}}
 
 @endsection
 

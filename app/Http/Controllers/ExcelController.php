@@ -20,33 +20,6 @@ use Excel;
 
 class ExcelController extends Controller
 {
-  public function e11(){
-    try{
-
-      Excel::create('Filename', function($excel) {
-        $excel->setTitle('ExcelFile');
-        //sheet Familles
-        $excel->sheet('Familles', function($sheet) {
-          $familles = Famille::all();
-          foreach ($familles as $item) {
-            $sheet->appendRow(array($item->description));
-          }
-        });
-
-        //sheet Equipements
-        $excel->sheet('Equipements', function($sheet) {
-          $equipements = Equipement::all();
-          foreach ($equipements as $item) {
-            $sheet->appendRow(array($item->description));
-          }
-        });
-      })->export('xls');
-
-    }catch(Exception $e){
-      return redirect()->back()->with('alert_danger',"Erreur !<br>Message d'erreur: ".$e->getMessage());
-    }
-    return "Done";
-  }
 
   //Exporter la liste des Familles ---------------------------------------------
   public function exportFamilles(){
@@ -254,4 +227,36 @@ class ExcelController extends Controller
           return redirect()->back()->with('alert_danger',"Erreur !<br>Message d'erreur: ".$e->getMessage());
         }
       }
+
+      //Exporter la liste des Interventions ----------------------------------------
+      public function exportInterventionsTech(){
+        try{
+          Excel::create('interventions', function($excel) {
+            $excel->sheet('interventions', function($sheet) {
+
+              $data = collect(DB::select("select
+              i.description, i.date, i.duree, i.created_at,
+              ti.nom as nom_ti, ti.description as description_ti,
+              e.description as description_e,
+              f.description as description_f,
+              u.nom as nom_u, u.prenom as prenom_u, u.login as login_u
+              from
+              interventions i left join type_interventions ti on i.id_type_intervention = ti.id_type_intervention
+              left join users u on i.id_user = u.id
+              left join equipements e on e.id_equipement = i.id_equipement
+              left join familles f on e.id_famille = f.id_famille
+              order by i.created_at desc"));
+
+              $sheet->appendRow( array("Type d'intervention","Technicien","Famille","Equipement","Intervention","Date","Duree"));
+              foreach ($data as $item) {
+                $sheet->appendRow( array($item->nom_ti,$item->nom_u." ".$item->prenom_u,$item->description_f,$item->description_e,$item->description,$item->date,$item->duree) );
+              }
+            });
+          })->export('xls');
+
+        }catch(Exception $e){
+          return redirect()->back()->with('alert_danger',"Erreur !<br>Message d'erreur: ".$e->getMessage());
+        }
+      }
+
     }
